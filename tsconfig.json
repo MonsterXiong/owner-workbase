@@ -1,0 +1,13 @@
+{
+    "compilerOptions":{
+        "allowJs":true,
+        "noUnusedLocals":false
+    },
+    "exclude": ["node_modules"],
+    "vueCompilerOptions": {
+        "target": 2.7,
+        "extensions":["vue"],
+        "experimentalDisableTemplateSupport":true
+
+    }
+}

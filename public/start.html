@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推演验证综合分析分系统</title>
+    <link rel="stylesheet" href="./entry/css/style.css" >
+    <script type="module">
+        const list = [
+            {
+                url: 'index.html',
+                target: '_blank', // _self 当前页面打开 _blank 新页面打开
+                icon: "./entry/battle.png",
+                label: "体系验证综合",
+            },
+            {
+                url: "#",
+                target: '_blank',
+                icon: "./entry/kehuan.png",
+                label: "跨体系验证综合",
+            },
+            {
+                url: "#",
+                target: '_blank',
+                icon: "./entry/jianmo.png",
+                label: "综合分析报告生成",
+            }
+        ]
+        genHtml(list);
+        function genHtml(list) {
+            const container = document.getElementById("container");
+            let innerHtml = "";
+            list.forEach((item) => {
+                innerHtml += `
+                <a class="box" href=${item.url} target=${item.target}>
+                    <div class="imgBox">
+                        <img class="bigCircle" src="./entry/img/circle.png" >
+                        <img class="bigCircle-center"  src="./entry/img/circle.png" >
+                        <img class="smallCircle" src="${item.icon}" >
+                    </div>
+                    <img class="circle" src="./entry/img/circle.png" >
+                    <div class="label">
+                        <p>${item.label}</p>
+                    </div>
+                </a>
+              `;
+            });
+            container.innerHTML = innerHtml;
+        }
+
+    </script>
+</head>
+<body>
+    <header class="title">
+        <div>
+            <h1>推演验证综合分析分系统</h1>
+            <!-- <p>INTELLIGENT DECISION SUPPORT PLATFORM</p> -->
+        </div>
+    </header>
+    <main id="container">
+    </main>
+
+</body>
+</html>
