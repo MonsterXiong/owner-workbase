@@ -2,19 +2,9 @@
   <div class="setting" title="设置">
     <el-popover placement="bottom" width="90" trigger="click">
       <div style="display: flex; flex-direction: column; gap: 10px">
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <el-button size="mini" @click="goToSetting">评分准则配置</el-button>
-        <!-- <el-button size="mini">推演数据配置</el-button> -->
+        <el-button size="mini" @click="goToSetting">首页导航管理端</el-button>
+        <el-button size="mini" @click="goToSetting">离线文档管理端</el-button>
+        <el-button size="mini" @click="goToSetting">颜色配置</el-button>
         <!-- <el-button style="margin: 0" size="mini" @click="onEditColor">颜色配置</el-button> -->
       </div>
       <img slot="reference" class="nav-icon" src="static/icon/set.svg" />
@@ -47,8 +37,7 @@ export default {
 }
 </style>
 <style>
-.el-button + .el-button,
-.el-checkbox.is-bordered + .el-checkbox.is-bordered {
-  margin-left: 0;
+.el-button+.el-button, .el-checkbox.is-bordered+.el-checkbox.is-bordered {
+  margin-left: 0 !important;
 }
 </style>
