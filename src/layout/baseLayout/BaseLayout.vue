@@ -28,9 +28,4 @@ export default {
   position: relative;
   overflow: hidden;
 }
-.current-project {
-  color: #356491;
-  font-weight: 600;
-  margin-right: 10px;
-}
 </style>

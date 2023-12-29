@@ -115,7 +115,7 @@ export default {
       color: transparent;
       font-weight: bold;
       font-size: 32px;
-      background-image: linear-gradient(to bottom, #195070, #2255c5);
+      background-image: @bg-color-linear--primary;
       background-clip: text;
     }
     img {
@@ -125,7 +125,7 @@ export default {
     }
   }
   .center {
-    color: rgb(53, 100, 145);
+    color: @font-color--primary;
     flex: 1;
     letter-spacing: 1px;
     .top-wrapper {
@@ -151,13 +151,13 @@ export default {
         }
       }
       .active {
-        background: linear-gradient(to bottom, #195070, #2255c5);
-        color: @base-background-color;
+        background: @bg-color-linear--primary;
+        color: @white-color;
         &:hover {
-          background: linear-gradient(to bottom, #195070, #2255c5);
+          background: @bg-color-linear--primary;
         }
         > span {
-          color: @base-background-color;
+          color: @white-color;
         }
       }
       .nav-icon {
@@ -179,20 +179,20 @@ export default {
         padding: 2px 4px;
         border-radius: 6px;
         &:hover {
-          background: #d5e0fb;
+          background: @bg-color-hover--primary;
         }
         > span {
           margin-right: 4px;
         }
       }
       .active {
-        background: linear-gradient(to bottom, #195070, #2255c5);
-        color: @base-background-color;
+        background: @bg-color-linear--primary;
+        color: @white-color;
         &:hover {
-          background: linear-gradient(to bottom, #195070, #2255c5);
+          background: @bg-color-linear--primary;
         }
         > span {
-          color: @base-background-color;
+          color: @white-color;
         }
       }
     }

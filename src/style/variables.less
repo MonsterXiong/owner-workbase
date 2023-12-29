@@ -1,13 +1,6 @@
 @base-border-color: var(--base-border-color, #d8dce5);
-@base-hover-color: var(--base-hover-color, #eee);
-@base-background-color: var(--base-background-color, #f7faff);
-@base-font-color: var(--base-font-color, #000);
 
 @menu-hover-color: var(--menu-hover-color, #e7effe);
-
-@map-panel-background-color: var(--map-panel-background-color, #ffffffe6);
-
-@font-color--primary: var(--font-color--primary, #25559e);
 
 @table-header-background-color: var(--table-header-background-color, #ebeffb);
 @table-header-font-color: var(--table-header-font-color, #3575ad);
@@ -15,17 +8,21 @@
 @table-border-color: var(--table-border-color, #dde4f1);
 @table-hover-color: var(--table-hover-color, #f5f7fa);
 
-@base-padding: 4px;
 
 @header-height: 80px;
 
-// #2154b5 // #195070 // #f19b38
-@default-color:#2154b5;
+// #2154b5 // #195070 // #f19b38 //#356491
+@default-color:#356491;
 @color--primary:var(--color--primary,@default-color);
 
+// linear-gradient(to bottom, #195070, #2255c5)
+// @bg-color-linear--primary:linear-gradient(to bottom, @default-color, lighten(@default-color,10%));
+@bg-color-linear--primary:linear-gradient(to bottom, #195070, #2255c5);
+@bg-color-hover--primary:var(--bg-color-hover--primary,#d5e0fb);
 
 @white-color:var(--white-color,#fff);
 
+// #f7faff
 @layout-bg-color: var(--layout-bg-color, #fff);
 @font-color--primary:var(--font-color--primary, @color--primary);
 @bg-color--primary: var(--bg-color--primary, @color--primary);

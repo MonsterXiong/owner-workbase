@@ -1,0 +1,34 @@
+.el-table td.el-table__cell,
+.el-table th.el-table__cell.is-leaf {
+  border-bottom: 1px @border-type @border-color--primary;
+}
+
+.el-table--border .el-table__cell {
+  border-right: 1px @border-type @border-color--primary;
+  color: @font-color--primary;
+  font-size: 14px;
+  &:last-child{
+    border-right: none;
+  }
+}
+
+.el-table th.el-table__cell {
+  background-color: @bg-color--primary;
+  color: @white-color;
+}
+
+.el-table--border, .el-table--group{
+  border: none;
+}
+
+.el-table--border::after, .el-table--group::after, .el-table::before{
+  background-color: transparent;
+}
+
+.el-button--text{
+  color:  @font-color--primary;
+  &:focus,
+  &:hover{
+    color:  @font-color--primary;
+  }
+}
