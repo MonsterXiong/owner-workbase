@@ -40,6 +40,10 @@ const extendRouteConstant = {
     path: '/genServices',
     name: 'GenServices',
   },
+  GEN_INTERFACE:{
+    path: '/genInterface',
+    name: 'GenInterface',
+  },
   FRAMEWORK_DESC: {
     path: '/frameworkDesc',
     name: 'FrameworkDesc',

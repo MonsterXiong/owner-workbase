@@ -83,7 +83,7 @@ export default {
 .base-list {
   height: 100%;
   border: 1px @border-type @border-color--primary;
-  width: 300px;
+  width: 260px;
 
   &+& {
     margin-left: 5px;
@@ -119,7 +119,7 @@ export default {
         cursor: pointer;
 
         .custom-content span+span {
-          color: #fff;
+          color: @white-color;
         }
       }
 
@@ -131,7 +131,7 @@ export default {
 
         span+span {
           font-size: 12px;
-          color: #000;
+          color: #bbb;
         }
       }
     }

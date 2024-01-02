@@ -13,6 +13,7 @@ const MENU_ITEM_CODE = {
   GEN_PROJECT:'gen-project',
   GEN_PAGE:'gen-page',
   GEN_SERVICES:'gen-services',
+  GEN_INTERFACE:'gen_interface',
   FRAMEWORK_DESC:'framework-desc',
   TOOL_LIB:'tool-lib',
   COMPONENTS_LIB:'components-lib',
@@ -88,6 +89,15 @@ const menuData = [
     type: VIEW_TYPE.VIEW_PAGE,
     eventType: EMIT_TYPE.PAGE,
     eventParams: routesConstant.GEN_SERVICES.path,
+  },
+  {
+    menuCode: MENU_ITEM_CODE.GEN_INTERFACE,
+    name: '接口生成',
+    parent: MENU_CODE.GEN_PLATFORM,
+    icon: 'icon-shouye',
+    type: VIEW_TYPE.VIEW_PAGE,
+    eventType: EMIT_TYPE.PAGE,
+    eventParams: routesConstant.GEN_INTERFACE.path,
   },
   {
     menuCode: MENU_ITEM_CODE.FRAMEWORK_DESC,

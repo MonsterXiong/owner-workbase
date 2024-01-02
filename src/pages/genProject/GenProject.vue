@@ -220,7 +220,8 @@ export default {
     },
     async onTableChange(tableId) {
       this.currentActiveTableId = tableId;
-      this.currentFieldList = await getFieldData(this.currentActiveDatabaseId, this.currentActiveTableId)
+      const {data}  = await getFieldData(this.currentActiveDatabaseId, this.currentActiveTableId)
+      this.currentFieldList  = data
     }
   }
 };
@@ -232,7 +233,7 @@ export default {
 }
 
 .table-wrapper {
-  width: calc(100% - 900px);
+  width: calc(100% - 780px);
   height: 100%;
   border: 1px @border-type @border-color--primary;
   margin-left: 5px

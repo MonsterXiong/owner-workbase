@@ -22,6 +22,10 @@ const routes = [
     component: () => import('@/pages/genServices/GenServices.vue'),
   },
   {
+    ...extendRouteConstant.GEN_INTERFACE,
+    component: () => import('@/pages/genInterface/GenInterface.vue'),
+  },
+  {
     ...extendRouteConstant.FRAMEWORK_DESC,
     component: () => import('@/pages/frameworkDesc/FrameworkDesc.vue'),
   },
