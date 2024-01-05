@@ -3,12 +3,13 @@
     <header ref="headerRef">表格内容</header>
     <el-table :height="tableHeight"  :data="tableData" border stripe>
       <el-table-column prop="Field" label="字段名" align="center"></el-table-column>
-      <el-table-column prop="Type" label="数据类型" width="150" align="center"></el-table-column>
-      <!-- <el-table-column prop="length" label="长度"></el-table-column> -->
+      <!-- <el-table-column prop="Type" label="数据类型" width="150" align="center"></el-table-column> -->
+      <el-table-column prop="_type" label="数据类型" width="120" align="center"></el-table-column>
+      <el-table-column prop="_length" label="长度"  align="center"></el-table-column>
       <el-table-column prop="Null" label="允许为空" width="80" align="center"></el-table-column>
       <el-table-column prop="Default" label="默认值" width="120" align="center"></el-table-column>
       <el-table-column prop="Comment" label="注释"></el-table-column>
-      <el-table-column prop="Key" label="是否主键" width="80" align="center"></el-table-column>
+      <el-table-column prop="Key" label="是否主键" width="50" align="center"></el-table-column>
       <!-- <el-table-column prop="bindDatabasePool" label="数据源" width="180">
           <template slot-scope="scope">
             {{ getLableByValue(databasePoolOption, scope.row.bindDatabasePool) }}
