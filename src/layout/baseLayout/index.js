@@ -5,6 +5,7 @@ const MENU_CODE = {
   FE_WORKSPACE: 'fe-workspace',
   GEN_PLATFORM: 'gen-platform',
   OTHER: 'other',
+  TEST_DEMO:'test-demo',
 }
 
 const MENU_ITEM_CODE = {
@@ -19,6 +20,26 @@ const MENU_ITEM_CODE = {
   COMPONENTS_LIB:'components-lib',
   RESOURCE_CSS:'resource-css',
 }
+
+const testMenuData = [
+  {
+    menuCode: MENU_CODE.TEST_DEMO,
+    name: '测试',
+    parent: null,
+    icon: 'icon-a-ziyuan22',
+    type: VIEW_TYPE.VIEW_MODULE,
+    disabled: false,
+  },
+  {
+    menuCode: 'test-layout',
+    name: '基础布局',
+    parent: MENU_CODE.TEST_DEMO,
+    icon: 'icon-shouye',
+    type: VIEW_TYPE.VIEW_PAGE,
+    eventType: EMIT_TYPE.PAGE,
+    eventParams: routesConstant.TEST_LAYOUT.path,
+  },
+]
 
 const menuData = [
   {
@@ -135,6 +156,7 @@ const menuData = [
     eventType: EMIT_TYPE.PAGE,
     eventParams: routesConstant.RESOURCE_CSS.path,
   },
+  ...testMenuData,
 ]
 
 export { MENU_CODE, menuData }

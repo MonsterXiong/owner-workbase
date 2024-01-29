@@ -41,6 +41,10 @@ const routes = [
     ...extendRouteConstant.RESOURCE_CSS,
     component: () => import('@/pages/resourceCss/ResourceCss.vue'),
   },
+  {
+    ...extendRouteConstant.TEST_LAYOUT,
+    component: () => import('@/pages/testLayout/TestLayout.vue'),
+  },
 ]
 
 export default routes

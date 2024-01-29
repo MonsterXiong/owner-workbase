@@ -60,6 +60,10 @@ const extendRouteConstant = {
     path: '/resourceCss',
     name: 'ResourceCss',
   },
+  TEST_LAYOUT:{
+    path: '/test/layout',
+    name: 'TestLayout',
+  },
 }
 
 
