@@ -1,4 +1,5 @@
 const path = require('path')
+const { CodeInspectorPlugin } = require('code-inspector-plugin');
 
 module.exports = {
   publicPath: './',
@@ -42,6 +43,9 @@ module.exports = {
         '@': path.resolve(__dirname, './src'),
       },
     }
+    config.plugins.push(CodeInspectorPlugin({
+      bundler: 'webpack',
+    }))
     config.externals = {
       cesium: 'Cesium',
     }
