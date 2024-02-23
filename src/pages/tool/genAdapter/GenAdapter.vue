@@ -1,6 +1,6 @@
 <template>
   <div>
-    genAdapter
+    <div>genAdapter111</div>
   </div>
 </template>
 
