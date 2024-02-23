@@ -36,7 +36,7 @@ export default {
     return {
       configData,
       menuData,
-      currentActiveMenu: MENU_CODE.FE_WORKSPACE,
+      currentActiveMenu: MENU_CODE.TOOL,
       currentActiveSubMenu: '',
     }
   },
@@ -65,14 +65,12 @@ export default {
     },
     onClick(menuItem) {
       const {eventType,eventParams} = menuItem
-      console.log(eventType,eventParams);
       if(!eventParams){
         return
       }
       if (eventType != EMIT_TYPE.PAGE) {
         return this.$emitter.emit(eventParams)
       }
-      console.log(eventParams,'eventParams');
       if (this.$route.fullPath != eventParams) {
         return this.$router.push(eventParams)
       }

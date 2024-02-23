@@ -60,12 +60,14 @@ const extendRouteConstant = {
     path: '/resourceCss',
     name: 'ResourceCss',
   },
+  // -----------------------
   TEST_LAYOUT:{
     path: '/test/layout',
     name: 'TestLayout',
   },
+  GEN_ADAPTER:{
+    path: '/tool/genAdapter',
+    name: 'GenAdapter',
+  },
 }
-
-
-
 export default extendRouteConstant

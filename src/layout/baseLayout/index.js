@@ -6,6 +6,7 @@ const MENU_CODE = {
   GEN_PLATFORM: 'gen-platform',
   OTHER: 'other',
   TEST_DEMO:'test-demo',
+  TOOL:'tool',
 }
 
 const MENU_ITEM_CODE = {
@@ -20,6 +21,26 @@ const MENU_ITEM_CODE = {
   COMPONENTS_LIB:'components-lib',
   RESOURCE_CSS:'resource-css',
 }
+
+const toolMenuData = [
+  {
+    menuCode: MENU_CODE.TOOL,
+    name: '工具',
+    parent: null,
+    icon: 'icon-a-ziyuan22',
+    type: VIEW_TYPE.VIEW_MODULE,
+    disabled: false,
+  },
+  {
+    menuCode: 'gen-adapter',
+    name: '适配器生成',
+    parent: MENU_CODE.TOOL,
+    icon: 'icon-shouye',
+    type: VIEW_TYPE.VIEW_PAGE,
+    eventType: EMIT_TYPE.PAGE,
+    eventParams: routesConstant.GEN_ADAPTER.path,
+  },
+]
 
 const testMenuData = [
   {
@@ -157,6 +178,7 @@ const menuData = [
     eventParams: routesConstant.RESOURCE_CSS.path,
   },
   ...testMenuData,
+  ...toolMenuData
 ]
 
 export { MENU_CODE, menuData }

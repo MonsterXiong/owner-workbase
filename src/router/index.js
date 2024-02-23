@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 const currentRoutes = [
   {
     path:routesConstant.HOME.path,
-    redirect:routesConstant.WELCOME.path,
+    redirect:routesConstant.GEN_ADAPTER.path,
     component: BaseLayout,
     children:[...baseRoutes,...routes,]
   },
