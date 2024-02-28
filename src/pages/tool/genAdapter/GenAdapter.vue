@@ -1,9 +1,22 @@
 <template>
   <div style="display: flex; gap: 10px; height: 100%" class="layout-page">
     <div style="flex: 1">
-      <el-form :model="formData" :rules="formRules" ref="formRef" label-width="auto" class="demo-dynamic">
+      <el-form
+        :model="formData"
+        :rules="formRules"
+        ref="formRef"
+        label-width="auto"
+        class="demo-dynamic"
+      >
         <el-form-item prop="type" label="适配器类型">
-          <el-input v-model="formData.type" placeholder="page"></el-input>
+          <el-select v-model="formData.type" placeholder="请选择适配器类型">
+            <el-option
+              v-for="item in typeOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item prop="name" label="适配器名称">
           <el-input v-model="formData.name" placeholder="graph"></el-input>
@@ -32,21 +45,58 @@
           </el-col>
           <el-col :span="3" style="text-align: end">
             <el-button icon="el-icon-plus" circle @click="addElement" style="margin-right: 10px"></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle @click.prevent="removeElement(item.id)"></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              @click.prevent="removeElement(item.id)"
+            ></el-button>
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('formRef')" style="margin-right: 5px">提交</el-button>
+          <el-button type="primary" @click="submitForm('formRef')" style="margin-right: 5px">生成</el-button>
+          <el-button type="primary" @click="parseForm('formRef')" style="margin-right: 5px">解析</el-button>
           <el-button @click="resetForm('formRef')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; gap: 10px">
       <div style="flex: 1; overflow: hidden">
-        <el-input type="textarea" placeholder="请输入内容" v-model="json"> </el-input>
-        <el-input type="textarea" placeholder="请输入内容" v-model="projectId" clearble> </el-input>
+        <div class="projectId-input">
+          <el-form inline>
+            <el-form-item prop="type" label="项目">
+              <el-select v-model="projectId" placeholder="请选择项目" clearable>
+                <el-option
+                  v-for="item in projectList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <el-button @click="getGenerateJson">查询</el-button>
+        </div>
+
+        <div class="code-json-editor">
+          <vueJsonEditor
+            style="height:100%"
+            v-model="jsonContent"
+            :show-btns="true"
+            copyable
+            downloadable
+            mode="code"
+            lang="zh"
+            :expanded-on-start="true"
+            @json-change="onJsonChange"
+            @json-save="onJsonSave"
+            @has-error="onError"
+          ></vueJsonEditor>
+        </div>
       </div>
-      <div style="height: 50px; display: flex; justify-content: center; align-items: center; gap: 10px">
+      <div
+        style="height: 50px; display: flex; justify-content: center; align-items: center; gap: 10px"
+      >
         <el-button type="primary" @click="parseJson">解析Json</el-button>
         <el-button type="primary" @click="clearJson">清空Json</el-button>
         <el-button type="primary" @click="downloadCompleteCode">下载完整项目代码</el-button>
@@ -59,7 +109,8 @@
 <script>
 import { nanoid } from 'nanoid'
 import { genAdapter, genProject } from '@/services/database.js'
-import { getGenerateJson } from '@/services/otherSystem.js'
+import { getGenerateJson, getProjectList } from '@/services/otherSystem.js'
+import vueJsonEditor from 'vue-json-editor'
 export default {
   data() {
     return {
@@ -72,10 +123,21 @@ export default {
         elementName: [{ required: true, message: '请输入要素Key', trigger: 'blur' }],
         message: [{ required: true, message: '请输入要素信息', trigger: 'blur' }],
       },
-      json: '',
-      projectId:'1236ced77f414b87b3348cbaad3dc66b',
+      hasJsonFlag: true,
+      jsonContent: {},
+      projectId: '1236ced77f414b87b3348cbaad3dc66b',
+      typeOption: [
+        {
+          label: '页面',
+          value: 'page',
+        },
+        {
+          label: '其他',
+          value: 'other',
+        },
+      ],
       formData: {
-        type: '',
+        type: 'page',
         name: '',
         componentName: '',
         entrySuffixName: '',
@@ -88,17 +150,57 @@ export default {
           },
         ],
       },
+      projectList:[]
     }
   },
+  components: {
+    vueJsonEditor,
+  },
+  mounted () {
+    this.getProjectList();
+  },
   methods: {
-    async downloadCompleteCode() {
-      let generateJson = ''
-      if (this.projectId) {
-        const {data} = await getGenerateJson(this.projectId)
-        generateJson = data
-      }else{
-        generateJson = this.json
+    async getProjectList(){
+      try {
+        const {data} = await getProjectList()
+        this.projectList = data.map(item=>{
+        const { projectId,projectName } = item
+        return {
+          ...item,
+          label:projectName,
+          value:projectId,
+        }
+      })
+      } catch (error) {
+        this.projectList = []
       }
+    },
+    onJsonChange(value) {
+      this.onJsonSave(value)
+    },
+    onJsonSave(value) {
+      this.jsonContent = value
+      this.hasJsonFlag = true
+    },
+    onError(value) {
+      console.log('json错误了value:', value)
+      this.hasJsonFlag = false
+    },
+    async getGenerateJson(){
+      if(!this.projectId){
+        this.$message.warning('请先选择项目')
+      }
+      const { data } = await getGenerateJson(this.projectId)
+      this.jsonContent = data
+    },
+    async downloadCompleteCode() {
+      let generateJson = this.jsonContent
+      // if (this.projectId) {
+      //   const { data } = await getGenerateJson(this.projectId)
+      //   generateJson = data
+      // } else {
+      //   generateJson = this.jsonContent
+      // }
       if (generateJson) {
         const file = await genProject(generateJson)
         const href = URL.createObjectURL(file)
@@ -109,18 +211,32 @@ export default {
     },
     downloadCode() {},
     parseJson() {
-      this.formData = {
-        ...this.json,
-        element: this.json?.element.map((item) => {
-          return {
-            id: nanoid(),
-            ...item,
+      Object.keys(this.jsonContent).forEach((key) => {
+        if (Object.keys(this.formData).includes(key)) {
+          if (key == 'element') {
+            this.formData[key] = this.jsonContent[key].map((item) => {
+              return {
+                id: nanoid(),
+                ...item,
+              }
+            })
+          } else {
+            this.formData[key] = this.jsonContent[key]
           }
-        }),
-      }
+        }
+      })
+      // this.formData = {
+      //   ...this.jsonContent,
+      //   element: this.jsonContent?.element.map((item) => {
+      //     return {
+      //       id: nanoid(),
+      //       ...item,
+      //     }
+      //   }),
+      // }
     },
     clearJson() {
-      this.json = ''
+      this.jsonContent = ''
     },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
@@ -129,6 +245,30 @@ export default {
           if (code == 0) {
             this.$message.success('操作成功')
           }
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    parseForm(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          let param = _.cloneDeep(this.formData)
+          if (this.formData?.element?.length) {
+            param.element = param.element.filter((item) => item.name)
+            if (!param.element.length) {
+              param.element = [
+                {
+                  id: nanoid(),
+                  field: '',
+                  elementName: '',
+                  message: '',
+                },
+              ]
+            }
+          }
+          this.jsonContent = param
         } else {
           console.log('error submit!!')
           return false
@@ -178,5 +318,25 @@ export default {
   background-color: var(--layout-background-color);
   background-image: var(--layout-background);
   padding: 10px;
+}
+
+.projectId-input {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  /deep/ .el-form-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+  }
+}
+.code-json-editor {
+  height: calc(100% - 50px);
+  /deep/ .jsoneditor-poweredBy {
+    display: none !important;
+  }
+  /deep/ .jsoneditor-vue {
+    height: 100%;
+  }
 }
 </style>

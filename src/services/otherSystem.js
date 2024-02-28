@@ -35,6 +35,16 @@ instance.interceptors.response.use(
   }
 )
 
+// 获取代码生成数据
 export function getGenerateJson(projectId) {
   return instance.post(`/business/extOperate/generateData?projectId=${projectId}`)
 }
+
+// 查询项目列表结果
+export function getProjectList() {
+  return instance.post(`/sfBase/sfProject/querySfProject`,{
+    pageNumber:'1',
+    pageSize:99999
+  })
+}
+
