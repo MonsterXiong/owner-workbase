@@ -13,7 +13,6 @@ import { HEADER_TYPE, PAGE_MAP } from './pageMap'
 export default {
   created() {
     this.currentActive = this.$route.query?.menuType || HEADER_TYPE.PROJECT
-
   },
   data() {
     return {

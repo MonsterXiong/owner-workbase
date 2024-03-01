@@ -33,9 +33,9 @@
 
 <script>
 import TabList from '@/components/tabList/TabList.vue'
-import { CATEGORY_LIST,  PAGE_LIST } from '../index'
-import {  CATEGORY_TYPE} from '../../constant/pageCategoryType'
-
+import {  CATEGORY_TYPE,} from '../../constant/pageCategoryType'
+import { CATEGORY_LIST } from '../../constant/pageCategoryList'
+import { PAGE_LIST } from '../../constant/pageList'
 export default {
   data() {
     return {

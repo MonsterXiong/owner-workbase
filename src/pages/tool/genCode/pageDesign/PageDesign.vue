@@ -41,6 +41,9 @@
         <el-button size="mini" type="primary" style="margin-right:10px">预览代码</el-button>
         <el-button size="mini" type="primary" style="margin-right:10px">下载代码</el-button>
         <el-button size="mini" type="primary" style="margin-right:10px">下载完整项目代码</el-button>
+        <el-button size="mini" type="primary" style="margin-right:10px">添加页面模板</el-button>
+        <!-- 1.页面分类类别code + 类别名称 -->
+        <!-- 1.页面模板（选择或者新增）类别category + 标识code + 模板名称 -->
       </div>
       <div class="bottom">
         <template v-if="!isPage">

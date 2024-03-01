@@ -6,6 +6,7 @@ export const CATEGORY_TYPE = {
   LIST: 'list',
   COMPOSE: 'compose',
   GLOBAL_DIALOG: 'globalGlobal',
+  /* Software Gen Code Placeholder */
   // 组织图
   // 绘图
   // 作战绘图

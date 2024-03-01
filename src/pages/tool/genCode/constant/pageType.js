@@ -11,4 +11,5 @@ export const PAGE_TYPE = {
   LEFT_LIST_RIGHT_TABLE: 'leftListRightTable',
   LEFT_TREE_RIGHT_TABLE: 'leftTreeRightTable',
   LEFT_TREE_RIGHT_GRAPH: 'leftTreeRightGraph',
+  /* Software Gen Code Placeholder */
 }
