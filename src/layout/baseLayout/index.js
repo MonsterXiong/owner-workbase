@@ -40,6 +40,15 @@ const toolMenuData = [
     eventType: EMIT_TYPE.PAGE,
     eventParams: routesConstant.GEN_ADAPTER.path,
   },
+  {
+    menuCode: 'gen-code',
+    name: '代码生成',
+    parent: MENU_CODE.TOOL,
+    icon: 'icon-shouye',
+    type: VIEW_TYPE.VIEW_PAGE,
+    eventType: EMIT_TYPE.PAGE,
+    eventParams: routesConstant.GEN_CODE.path,
+  },
 ]
 
 const testMenuData = [

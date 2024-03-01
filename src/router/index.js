@@ -14,6 +14,10 @@ const currentRoutes = [
     component: BaseLayout,
     children:[...baseRoutes,...routes,]
   },
+  {
+    ...routesConstant.GEN_CODE,
+    component: () => import('@/pages/tool/genCode/GenCode.vue'),
+  },
 ]
 
 const router = new VueRouter({

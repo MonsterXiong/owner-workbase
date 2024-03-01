@@ -69,5 +69,9 @@ const extendRouteConstant = {
     path: '/tool/genAdapter',
     name: 'GenAdapter',
   },
+  GEN_CODE:{
+    path: '/tool/genCode',
+    name: 'GenCode',
+  },
 }
 export default extendRouteConstant

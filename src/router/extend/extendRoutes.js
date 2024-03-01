@@ -50,6 +50,7 @@ const routes = [
     ...extendRouteConstant.GEN_ADAPTER,
     component: () => import('@/pages/tool/genAdapter/GenAdapter.vue'),
   },
+
 ]
 
 
