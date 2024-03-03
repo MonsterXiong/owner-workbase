@@ -3,33 +3,21 @@
     <div class="left-wrapper">
       <div class="top">
         <el-select v-model="projectId" filterable placeholder="请选择">
-          <el-option
-            v-for="item in projectList"
-            :key="item.projectId"
-            :label="item.projectName"
-            :value="item.projectId"
-          ></el-option>
+          <el-option v-for="item in projectList" :key="item.projectId" :label="item.name"
+            :value="item.projectId"></el-option>
         </el-select>
+
+        <span class="add-icon" @click="onAddProject"><i class="el-icon-plus"></i></span>
       </div>
       <div class="bottom">
         <div style="height:100%;">
-          <header
-            style="display:flex;font-size:14px;padding:0 5px;line-height:30px;border-bottom:1px solid #eee"
-          >
+          <header style="display:flex;font-size:14px;padding:0 5px;line-height:30px;border-bottom:1px solid #eee">
             <span>页面列表</span>
-            <span style="margin-left:auto;cursor:pointer"><i class="el-icon-plus"></i></span>
+            <span class="add-icon" @click="onAddPage"><i class="el-icon-plus"></i></span>
           </header>
           <div style="height:calc(100% - 31px);overflow-y:auto">
-            <el-tree
-              ref="treeRef"
-              node-key="pageId"
-              :data="treeData"
-              highlight-current
-              :props="defaultProps"
-              default-expand-all
-              :expand-on-click-node="false"
-              @node-click="handleNodeClick"
-            ></el-tree>
+            <el-tree ref="treeRef" node-key="pageId" :data="treeData" highlight-current :props="defaultProps"
+              default-expand-all :expand-on-click-node="false" @node-click="handleNodeClick"></el-tree>
           </div>
         </div>
       </div>
@@ -38,9 +26,9 @@
       <div class="top">
         <el-button size="mini" type="primary" style="margin-right:10px" @click="onPageDesign">设计页面</el-button>
         <el-button size="mini" type="primary" style="margin-right:10px" @click="onClearPage">清空页面</el-button>
-        <el-button size="mini" type="primary" style="margin-right:10px">预览代码</el-button>
-        <el-button size="mini" type="primary" style="margin-right:10px">下载代码</el-button>
-        <el-button size="mini" type="primary" style="margin-right:10px">下载完整项目代码</el-button>
+        <!-- <el-button size="mini" type="primary" style="margin-right:10px">预览代码</el-button> -->
+        <!-- <el-button size="mini" type="primary" style="margin-right:10px">下载代码</el-button> -->
+        <!-- <el-button size="mini" type="primary" style="margin-right:10px">下载完整项目代码</el-button> -->
         <el-button size="mini" type="primary" style="margin-right:10px" @click="onAddComponentTemplate">添加页面模板</el-button>
         <!-- 1.页面分类类别code + 类别名称 -->
         <!-- 1.页面模板（选择或者新增）类别category + 标识code + 模板名称 -->
@@ -50,40 +38,34 @@
           <div>这是功能页面</div>
         </template>
         <template v-else-if="currentComponent">
-            <component :is="currentComponent"></component>
+          <component :is="currentComponent"></component>
         </template>
       </div>
     </div>
     <PageDetailDialog @onClick="onClick" ref="pageDetailDialogRef" />
     <AddComponentTemplateDialog @onSubmit="onAddComponentTemplate" ref="addComponentTemplateDialogRef" />
+    <AddOrUpdatePageDialog :projectId="projectId" :pageList="currentPageList" @onSubmit="onSubmitPage"
+      ref="AddOrUpdatePageDialogRef" />
+    <AddOrUpdateProjectDialog @onSubmit="onSubmitProject" ref="AddOrUpdateProjectDialogRef" />
   </div>
 </template>
 
 <script>
 import PageDetailDialog from './components/PageDetailDialog.vue'
 import { COMPONENT_MAP } from './template/index'
-import {PAGE_TYPE} from '../constant/pageType'
+import { PAGE_TYPE } from '../constant/pageType'
 import { listToTree } from '@/utils/commonUtil'
 import AddComponentTemplateDialog from './components/AddComponentTemplateDialog.vue'
+import AddOrUpdatePageDialog from './components/AddOrUpdatePageDialog.vue'
+import AddOrUpdateProjectDialog from './components/AddOrUpdateProjectDialog.vue'
+import { nanoid } from 'nanoid'
+import {WfGenProjectService} from '@/services'
+import QueryConditionBuilder from '@/utils/queryConditionBuilder'
 export default {
   data() {
     return {
-      // currentComponent: null,
-      projectId: '1',
-      projectList: [
-        {
-          projectId: '1',
-          projectName: '新一代',
-        },
-        {
-          projectId: '2',
-          projectName: '项目1',
-        },
-        {
-          projectId: '3',
-          projectName: '项目2',
-        },
-      ],
+      projectId: '',
+      projectList: [],
       pageList: [
         {
           pageId: '1',
@@ -91,6 +73,7 @@ export default {
           bindProject: '1',
           pageName: '装备模块',
           type: 'module',
+          code: ''
         },
         {
           pageId: '1-1',
@@ -98,8 +81,9 @@ export default {
           bindProject: '1',
           pageName: '装备管理',
           type: 'page',
-          param:{
-            type:PAGE_TYPE.LEFT_LIST_RIGHT_TABLE
+          code: '',
+          param: {
+            type: PAGE_TYPE.LEFT_LIST_RIGHT_TABLE
           }
         },
         {
@@ -108,6 +92,7 @@ export default {
           bindProject: '2',
           pageName: '体系模块',
           type: 'module',
+          code: '',
         },
         {
           pageId: '2-1',
@@ -115,8 +100,9 @@ export default {
           bindProject: '2',
           pageName: '指标管理',
           type: 'page',
-          param:{
-            type:PAGE_TYPE.LEFT_TREE_RIGHT_TABLE
+          code: '',
+          param: {
+            type: PAGE_TYPE.LEFT_TREE_RIGHT_TABLE
           }
         },
       ],
@@ -137,33 +123,72 @@ export default {
       handler(newValue) {
         if (newValue) {
           this.currentPageList = this.pageList.filter((item) => item.bindProject == newValue)
-          this.treeData = listToTree(_.cloneDeep(this.currentPageList), { idKey: 'pageId' })
-          this.currentActivePage = {}
-          if (!Object.keys(this.currentActivePage).length && this.treeData?.length) {
-            this.$nextTick(() => {
-              const nodeData = this.selectFirstNode(this.treeData)
-              if (nodeData) {
-                this.currentActivePage = nodeData
-                this.$refs.treeRef.setCurrentKey(nodeData.pageId)
-              }
-            })
-          }
+        }else{
+          this.currentPageList = []
         }
       },
       immediate: true,
     },
+    currentPageList: {
+      handler(newValue) {
+        this.treeData = listToTree(_.cloneDeep(newValue), { idKey: 'pageId' })
+        this.currentActivePage = {}
+        if (!Object.keys(this.currentActivePage).length && this.treeData?.length) {
+          this.$nextTick(() => {
+            const nodeData = this.selectFirstNode(this.treeData)
+            if (nodeData) {
+              this.currentActivePage = nodeData
+              this.$refs.treeRef.setCurrentKey(nodeData.pageId)
+            }
+          })
+        }
+
+      },
+      immediate: true,
+    }
   },
-  components: { PageDetailDialog, AddComponentTemplateDialog },
+  components: { PageDetailDialog, AddComponentTemplateDialog, AddOrUpdatePageDialog, AddOrUpdateProjectDialog },
   computed: {
     isPage() {
       return this.currentActivePage?.type == 'page'
     },
-    currentComponent(){
+    currentComponent() {
       return COMPONENT_MAP[this.currentActivePage?.param?.type]
     }
   },
+  mounted () {
+    this.getProjectList()
+  },
   methods: {
-    onAddComponentTemplate(){
+    async getProjectList(){
+      const queryCondition = QueryConditionBuilder.getInstanceNoPage()
+      const {data} = await WfGenProjectService.queryWfGenProject(queryCondition)
+      this.projectList = data
+      if(!this.projectId && this.projectList.length){
+        this.projectId = this.projectList[0].projectId
+      }
+    },
+    onAddProject() {
+      this.$refs.AddOrUpdateProjectDialogRef.show()
+    },
+    async onSubmitProject(param) {
+      await WfGenProjectService.saveWfGenProject(param)
+      await this.getProjectList()
+    },
+    onSubmitPage(param) {
+      const id = nanoid()
+      const pageInfo = {
+        ...param,
+        pageId: id
+      }
+      this.pageList.push(pageInfo)
+      this.currentPageList = this.pageList.filter(item => item.bindProject == this.projectId)
+      this.currentActivePage = pageInfo
+    },
+    onAddPage() {
+      this.$refs.AddOrUpdatePageDialogRef.show()
+    },
+    onAddComponentTemplate() {
       this.$refs.addComponentTemplateDialogRef.show()
     },
     selectFirstNode(treeData) {
@@ -182,14 +207,13 @@ export default {
       this.currentActivePage = data
     },
     onClick(pageType) {
-      this.currentActivePage.param.type = pageType
-      // this.currentComponent = COMPONENT_MAP[pageType]
+      this.$set(this.currentActivePage['param'],'type',pageType)
     },
     onPageDesign() {
       this.$refs.pageDetailDialogRef.show()
     },
     onClearPage() {
-      this.currentComponent = null
+      this.currentActivePage.param = {}
     },
   },
 }
@@ -207,25 +231,42 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  > .top {
+
+  >.top {
     padding-left: 5px;
     line-height: 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
-  > .bottom {
+
+  >.bottom {
     height: calc(100% - 50px);
   }
 }
+
 .left-wrapper {
   width: 270px;
-  > .bottom {
+
+  >.top {
+    display: flex;
+    padding: 0 5px;
+  }
+
+  >.bottom {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 }
+
 .right-wrapper {
   flex: 1;
-  > .bottom {
+
+  >.bottom {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
+}
+
+
+.add-icon {
+  margin-left: auto;
+  cursor: pointer
 }
 </style>

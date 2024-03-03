@@ -17,24 +17,21 @@ instance.interceptors.response.use(
   }
 )
 
+export default instance
+
 export function getDatabaseData(params) {
   return instance.post('/database/getDatabaseData', params)
 }
 export function getFieldData(database, tableName) {
   return instance.get(`/database/${database}/${tableName}`)
 }
-export function genAdapter(params) {
-  return instance.post(`/gen-tool/quickGenAdapter`, params)
-}
+
 export function genProject(params) {
   return instance.post(`/gen/genProject`, params, {
     responseType: 'blob',
   })
 }
 
-export function quickGenCategoryType(params) {
-  return instance.post(`/gen-tool/quickGenCategoryType`, params)
-}
-export function quickGenComponentTemplate(params) {
-  return instance.post(`/gen-tool/quickGenComponentTemplate`, params)
+export function genAdapter(params) {
+  return instance.post(`/gen-tool/quickGenAdapter`, params)
 }

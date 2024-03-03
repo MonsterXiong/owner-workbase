@@ -9,5 +9,4 @@ apis.keys().forEach((key) => {
   }
   modules[moduleName] = apis(key).default
 })
-
 Object.assign(exports, modules)

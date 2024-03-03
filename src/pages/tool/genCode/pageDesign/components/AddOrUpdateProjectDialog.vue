@@ -2,21 +2,6 @@
   <BaseDialog :title="dialogTitle" :visible="dialogVisible" :before-close="onDialogClose" :width="dialogWidth">
     <div class="common-page page-detail">
       <el-form ref="formRef" :model="formData" :rules="formRules" label-width="80px">
-        <el-form-item label="添加类型" prop="type">
-          <el-radio-group v-model="formData.type">
-            <el-radio label="pageTemplate">页面模板</el-radio>
-            <el-radio label="pageCategoryTemplate">页面模板类别</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <template v-if="formData.type == 'pageTemplate'">
-          <el-form-item label="类别" prop="categoryType">
-            <el-select v-model="formData.categoryType" placeholder="请选择类别">
-              <el-option v-for="item in categoryList" :key="item.value" :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-        </template>
-
         <el-form-item label="名称" prop="name">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
@@ -33,31 +18,22 @@
 </template>
 
 <script>
-import { CATEGORY_LIST } from '../../constant/pageCategoryList'
-import {GenToolExtendService} from '@/services'
-
 export default {
+  props: {
+    pageList: {}
+  },
   data() {
     return {
-      categoryList: CATEGORY_LIST,
-      dialogTitle: '添加页面类别/模板',
+      dialogTitle: '添加/更新项目',
       dialogVisible: false,
       dialogWidth: '700px',
       formData: {
-        type: 'pageTemplate',
-        categoryType:'',
         name: '',
         code: ''
       },
       formRules: {
         name: [
           { required: true, message: '请输入名称', trigger: 'blur' },
-        ],
-        categoryType: [
-          { required: true, message: '请选择类别', trigger: 'change' }
-        ],
-        code: [
-          { required: true, message: '请输入标识', trigger: 'change' }
         ],
       }
     }
@@ -69,21 +45,13 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          console.log(this.formData.type);
-          if (this.formData.type == 'pageTemplate') {
-            await GenToolExtendService.quickGenComponentTemplate(this.formData)
-          } else  if (this.formData.type == 'pageCategoryTemplate'){
-            await GenToolExtendService.quickGenCategoryType(this.formData)
-          }
+          this.$emit('onSubmit',this.formData)
           this.onDialogClose()
         } else {
           console.log('error submit!!');
           return false;
         }
       });
-    },
-    onClick(pageItem) {
-      this.currentActivePageType = pageItem.value
     },
     onReset() {
       this.$refs.formRef.resetFields();
