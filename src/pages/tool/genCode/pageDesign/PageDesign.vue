@@ -41,7 +41,7 @@
         <el-button size="mini" type="primary" style="margin-right:10px">预览代码</el-button>
         <el-button size="mini" type="primary" style="margin-right:10px">下载代码</el-button>
         <el-button size="mini" type="primary" style="margin-right:10px">下载完整项目代码</el-button>
-        <el-button size="mini" type="primary" style="margin-right:10px">添加页面模板</el-button>
+        <el-button size="mini" type="primary" style="margin-right:10px" @click="onAddComponentTemplate">添加页面模板</el-button>
         <!-- 1.页面分类类别code + 类别名称 -->
         <!-- 1.页面模板（选择或者新增）类别category + 标识code + 模板名称 -->
       </div>
@@ -55,6 +55,7 @@
       </div>
     </div>
     <PageDetailDialog @onClick="onClick" ref="pageDetailDialogRef" />
+    <AddComponentTemplateDialog @onSubmit="onAddComponentTemplate" ref="addComponentTemplateDialogRef" />
   </div>
 </template>
 
@@ -63,6 +64,7 @@ import PageDetailDialog from './components/PageDetailDialog.vue'
 import { COMPONENT_MAP } from './template/index'
 import {PAGE_TYPE} from '../constant/pageType'
 import { listToTree } from '@/utils/commonUtil'
+import AddComponentTemplateDialog from './components/AddComponentTemplateDialog.vue'
 export default {
   data() {
     return {
@@ -151,7 +153,7 @@ export default {
       immediate: true,
     },
   },
-  components: { PageDetailDialog },
+  components: { PageDetailDialog, AddComponentTemplateDialog },
   computed: {
     isPage() {
       return this.currentActivePage?.type == 'page'
@@ -161,6 +163,9 @@ export default {
     }
   },
   methods: {
+    onAddComponentTemplate(){
+      this.$refs.addComponentTemplateDialogRef.show()
+    },
     selectFirstNode(treeData) {
       for (let index = 0; index < treeData.length; index++) {
         const treeDataItem = treeData[index]

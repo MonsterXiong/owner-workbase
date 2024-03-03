@@ -31,3 +31,10 @@ export function genProject(params) {
     responseType: 'blob',
   })
 }
+
+export function quickGenCategoryType(params) {
+  return instance.post(`/gen-tool/quickGenCategoryType`, params)
+}
+export function quickGenComponentTemplate(params) {
+  return instance.post(`/gen-tool/quickGenComponentTemplate`, params)
+}
