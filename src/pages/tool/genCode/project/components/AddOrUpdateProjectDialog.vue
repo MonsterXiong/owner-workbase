@@ -45,8 +45,8 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          await SfProjectService.saveSfProject(this.formData)
-          this.$emit('refresh')
+          const { data } = await SfProjectService.saveSfProject(this.formData)
+          this.$emit('refresh',data)
           this.onDialogClose()
         } else {
           console.log('error submit!!')

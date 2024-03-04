@@ -33,9 +33,10 @@
 
 <script>
 import { SfMenuService } from '@/services'
+import QueryConditionBuilder from '@/utils/queryConditionBuilder'
+
 export default {
   props: {
-    menuList: {},
     projectId: {},
   },
   data() {
@@ -43,6 +44,7 @@ export default {
       dialogTitle: '添加/更新页面',
       dialogVisible: false,
       dialogWidth: '700px',
+      menuList:[],
       formData: {
         menuType: 'page',
         parentId: '',
@@ -59,6 +61,15 @@ export default {
   methods: {
     show() {
       this.dialogVisible = true
+      this.getMenuList()
+    },
+    async getMenuList(){
+      this.menuList = []
+      const queryCondition = QueryConditionBuilder.getInstanceNoPage()
+      queryCondition.buildEqualQuery('bind_project', this.projectId)
+      queryCondition.buildAscSort('sort')
+      const { data } = await SfMenuService.querySfMenu(queryCondition)
+      this.menuList = data
     },
     onSubmit(formName) {
       this.$refs[formName].validate(async (valid) => {
