@@ -2,40 +2,47 @@
   <div class="common-page page-design">
     <div class="left-wrapper">
       <div class="top">
-        <el-select v-model="projectId" filterable placeholder="请选择">
-          <el-option v-for="item in projectList" :key="item.projectId" :label="item.name"
-            :value="item.projectId"></el-option>
+        <el-select v-model="projectId" filterable placeholder="请选择" @change="onChangeProject">
+          <el-option v-for="item in projectList" :key="item.projectId" :label="item.projectName" :value="item.projectId"></el-option>
         </el-select>
 
         <span class="add-icon" @click="onAddProject"><i class="el-icon-plus"></i></span>
       </div>
       <div class="bottom">
-        <div style="height:100%;">
-          <header style="display:flex;font-size:14px;padding:0 5px;line-height:30px;border-bottom:1px solid #eee">
+        <div style="height: 100%">
+          <header style="display: flex; font-size: 14px; padding: 0 5px; line-height: 30px; border-bottom: 1px solid #eee">
             <span>页面列表</span>
             <span class="add-icon" @click="onAddPage"><i class="el-icon-plus"></i></span>
           </header>
-          <div style="height:calc(100% - 31px);overflow-y:auto">
-            <el-tree ref="treeRef" node-key="pageId" :data="treeData" highlight-current :props="defaultProps"
-              default-expand-all :expand-on-click-node="false" @node-click="handleNodeClick"></el-tree>
+          <div style="height: calc(100% - 31px); overflow-y: auto">
+            <el-tree
+              ref="treeRef"
+              node-key="menuId"
+              :data="treeData"
+              highlight-current
+              :props="defaultProps"
+              default-expand-all
+              :expand-on-click-node="false"
+              @node-click="handleNodeClick"
+            ></el-tree>
           </div>
         </div>
       </div>
     </div>
     <div class="right-wrapper">
       <div class="top">
-        <el-button size="mini" type="primary" style="margin-right:10px" @click="onPageDesign">设计页面</el-button>
-        <el-button size="mini" type="primary" style="margin-right:10px" @click="onClearPage">清空页面</el-button>
+        <el-button size="mini" type="primary" style="margin-right: 10px" @click="onPageDesign">设计页面</el-button>
+        <el-button size="mini" type="primary" style="margin-right: 10px" @click="onClearPage">清空页面</el-button>
         <!-- <el-button size="mini" type="primary" style="margin-right:10px">预览代码</el-button> -->
         <!-- <el-button size="mini" type="primary" style="margin-right:10px">下载代码</el-button> -->
         <!-- <el-button size="mini" type="primary" style="margin-right:10px">下载完整项目代码</el-button> -->
-        <el-button size="mini" type="primary" style="margin-right:10px" @click="onAddComponentTemplate">添加页面模板</el-button>
+        <el-button size="mini" type="primary" style="margin-right: 10px" @click="onAddComponentTemplate">添加页面模板</el-button>
         <!-- 1.页面分类类别code + 类别名称 -->
         <!-- 1.页面模板（选择或者新增）类别category + 标识code + 模板名称 -->
       </div>
       <div class="bottom">
-        <template v-if="!isPage">
-          <div>这是功能页面</div>
+        <template v-if="isModule">
+          <div>这是模块</div>
         </template>
         <template v-else-if="currentComponent">
           <component :is="currentComponent"></component>
@@ -44,9 +51,8 @@
     </div>
     <PageDetailDialog @onClick="onClick" ref="pageDetailDialogRef" />
     <AddComponentTemplateDialog @onSubmit="onAddComponentTemplate" ref="addComponentTemplateDialogRef" />
-    <AddOrUpdatePageDialog :projectId="projectId" :pageList="currentPageList" @onSubmit="onSubmitPage"
-      ref="AddOrUpdatePageDialogRef" />
-    <AddOrUpdateProjectDialog @onSubmit="onSubmitProject" ref="AddOrUpdateProjectDialogRef" />
+    <AddOrUpdateMenuDialog :projectId="projectId" :menuList="menuList" @refresh="onRefreshMenuList" ref="AddOrUpdateMenuDialogRef" />
+    <AddOrUpdateProjectDialog @refresh="getProjectList" ref="AddOrUpdateProjectDialogRef" />
   </div>
 </template>
 
@@ -56,137 +62,87 @@ import { COMPONENT_MAP } from './template/index'
 import { PAGE_TYPE } from '../constant/pageType'
 import { listToTree } from '@/utils/commonUtil'
 import AddComponentTemplateDialog from './components/AddComponentTemplateDialog.vue'
-import AddOrUpdatePageDialog from './components/AddOrUpdatePageDialog.vue'
-import AddOrUpdateProjectDialog from './components/AddOrUpdateProjectDialog.vue'
-import { nanoid } from 'nanoid'
-import {WfGenProjectService} from '@/services'
+import AddOrUpdateMenuDialog from './components/AddOrUpdateMenuDialog.vue'
+import AddOrUpdateProjectDialog from '../project/components/AddOrUpdateProjectDialog.vue'
+import { SfProjectService, SfMenuService } from '@/services'
 import QueryConditionBuilder from '@/utils/queryConditionBuilder'
 export default {
   data() {
     return {
       projectId: '',
       projectList: [],
-      pageList: [
-        {
-          pageId: '1',
-          parentId: null,
-          bindProject: '1',
-          pageName: '装备模块',
-          type: 'module',
-          code: ''
-        },
-        {
-          pageId: '1-1',
-          parentId: '1',
-          bindProject: '1',
-          pageName: '装备管理',
-          type: 'page',
-          code: '',
-          param: {
-            type: PAGE_TYPE.LEFT_LIST_RIGHT_TABLE
-          }
-        },
-        {
-          pageId: '2',
-          parentId: null,
-          bindProject: '2',
-          pageName: '体系模块',
-          type: 'module',
-          code: '',
-        },
-        {
-          pageId: '2-1',
-          parentId: '2',
-          bindProject: '2',
-          pageName: '指标管理',
-          type: 'page',
-          code: '',
-          param: {
-            type: PAGE_TYPE.LEFT_TREE_RIGHT_TABLE
-          }
-        },
-      ],
+      menuList: [],
       formData: {
         type: '',
       },
-      currentPageList: [],
       treeData: [],
       defaultProps: {
         children: 'children',
-        label: 'pageName',
+        label: 'menuName',
       },
       currentActivePage: {},
     }
   },
-  watch: {
-    projectId: {
-      handler(newValue) {
-        if (newValue) {
-          this.currentPageList = this.pageList.filter((item) => item.bindProject == newValue)
-        }else{
-          this.currentPageList = []
-        }
-      },
-      immediate: true,
-    },
-    currentPageList: {
-      handler(newValue) {
-        this.treeData = listToTree(_.cloneDeep(newValue), { idKey: 'pageId' })
-        this.currentActivePage = {}
-        if (!Object.keys(this.currentActivePage).length && this.treeData?.length) {
-          this.$nextTick(() => {
-            const nodeData = this.selectFirstNode(this.treeData)
-            if (nodeData) {
-              this.currentActivePage = nodeData
-              this.$refs.treeRef.setCurrentKey(nodeData.pageId)
-            }
-          })
-        }
-
-      },
-      immediate: true,
-    }
-  },
-  components: { PageDetailDialog, AddComponentTemplateDialog, AddOrUpdatePageDialog, AddOrUpdateProjectDialog },
+  components: { PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, AddOrUpdateProjectDialog },
   computed: {
-    isPage() {
-      return this.currentActivePage?.type == 'page'
+    isModule() {
+      return !this.isPage(this.currentActivePage)
     },
     currentComponent() {
       return COMPONENT_MAP[this.currentActivePage?.param?.type]
-    }
+    },
   },
-  mounted () {
-    this.getProjectList()
+  mounted() {
+    this.init()
   },
   methods: {
-    async getProjectList(){
+    async init() {
+      await this.getProjectList()
+      await this.getMenuList()
+    },
+    isPage(menuItem) {
+      return menuItem?.menuType == 'page'
+    },
+    onChangeProject(value) {
+      this.getMenuList()
+    },
+    async getMenuList() {
+      this.menuList = []
       const queryCondition = QueryConditionBuilder.getInstanceNoPage()
-      const {data} = await WfGenProjectService.queryWfGenProject(queryCondition)
+      queryCondition.buildEqualQuery('bind_project', this.projectId)
+      queryCondition.buildAscSort('sort')
+      const { data } = await SfMenuService.querySfMenu(queryCondition)
+      this.menuList = data
+      this.treeData = listToTree(_.cloneDeep(data), { idKey: 'menuId' })
+      this.currentActivePage = {}
+      if (!Object.keys(this.currentActivePage).length && this.treeData?.length) {
+        this.$nextTick(() => {
+          const nodeData = this.selectFirstNode(this.treeData)
+          if (nodeData) {
+            this.currentActivePage = nodeData
+            this.$refs.treeRef.setCurrentKey(nodeData.menuId)
+          }
+        })
+      }
+    },
+    async getProjectList() {
+      const queryCondition = QueryConditionBuilder.getInstanceNoPage()
+      queryCondition.buildAscSort('sort')
+      const { data } = await SfProjectService.querySfProject(queryCondition)
       this.projectList = data
-      if(!this.projectId && this.projectList.length){
+      if (!this.projectId && this.projectList.length) {
         this.projectId = this.projectList[0].projectId
       }
     },
     onAddProject() {
       this.$refs.AddOrUpdateProjectDialogRef.show()
     },
-    async onSubmitProject(param) {
-      await WfGenProjectService.saveWfGenProject(param)
-      await this.getProjectList()
-    },
-    onSubmitPage(param) {
-      const id = nanoid()
-      const pageInfo = {
-        ...param,
-        pageId: id
-      }
-      this.pageList.push(pageInfo)
-      this.currentPageList = this.pageList.filter(item => item.bindProject == this.projectId)
-      this.currentActivePage = pageInfo
+    async onRefreshMenuList(menuData) {
+      await this.getMenuList()
+      this.currentActivePage = menuData
     },
     onAddPage() {
-      this.$refs.AddOrUpdatePageDialogRef.show()
+      this.$refs.AddOrUpdateMenuDialogRef.show()
     },
     onAddComponentTemplate() {
       this.$refs.addComponentTemplateDialogRef.show()
@@ -194,7 +150,7 @@ export default {
     selectFirstNode(treeData) {
       for (let index = 0; index < treeData.length; index++) {
         const treeDataItem = treeData[index]
-        if (treeDataItem.type === 'page') {
+        if (this.isPage(treeDataItem)) {
           return treeDataItem
         } else {
           if (treeDataItem?.children?.length) {
@@ -207,7 +163,10 @@ export default {
       this.currentActivePage = data
     },
     onClick(pageType) {
-      this.$set(this.currentActivePage['param'],'type',pageType)
+      if (!this.currentActivePage?.param) {
+        this.$set(this.currentActivePage, 'param', {})
+      }
+      this.$set(this.currentActivePage['param'], 'type', pageType)
     },
     onPageDesign() {
       this.$refs.pageDetailDialogRef.show()
@@ -232,13 +191,13 @@ export default {
   flex-direction: column;
   gap: 10px;
 
-  >.top {
+  > .top {
     padding-left: 5px;
     line-height: 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 
-  >.bottom {
+  > .bottom {
     height: calc(100% - 50px);
   }
 }
@@ -246,12 +205,12 @@ export default {
 .left-wrapper {
   width: 270px;
 
-  >.top {
+  > .top {
     display: flex;
     padding: 0 5px;
   }
 
-  >.bottom {
+  > .bottom {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 }
@@ -259,14 +218,13 @@ export default {
 .right-wrapper {
   flex: 1;
 
-  >.bottom {
+  > .bottom {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 }
 
-
 .add-icon {
   margin-left: auto;
-  cursor: pointer
+  cursor: pointer;
 }
 </style>

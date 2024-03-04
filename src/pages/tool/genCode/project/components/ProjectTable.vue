@@ -4,13 +4,13 @@
       <el-table :data="tableData" height="100%" @selection-change="onSelectionChange">
         <el-table-column type="selection" width="50" align="center"></el-table-column>
         <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-        <el-table-column prop="name" label="项目名称" align="center">
+        <el-table-column prop="projectName" label="项目名称" align="center">
           <template slot-scope="scope">
-            <el-tag size="medium">{{ scope.row.name }}</el-tag>
+            <el-tag size="medium">{{ scope.row.projectName }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="code" label="项目标识" align="center"></el-table-column>
-        <el-table-column prop="aliasName" label="简称" align="center"></el-table-column>
+        <el-table-column prop="projectCode" label="项目标识" align="center"></el-table-column>
+        <el-table-column prop="shortName" label="简称" align="center"></el-table-column>
         <el-table-column prop="remark" label="备注" align="center"></el-table-column>
         <el-table-column prop="descript" label="描述" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="220">
@@ -27,7 +27,7 @@
         @size-change="onSizeChange"
         @current-change="onCurrentChange"
         :current-page="pageInfo.pageNumber"
-        :page-sizes="[10,20,50,100]"
+        :page-sizes="[10, 20, 50, 100]"
         :page-size="pageInfo.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -40,26 +40,40 @@
 export default {
   props: {
     tableData: {},
+    total: {},
+    pageInfo: {
+      type: Object,
+      default: () => {
+        return {
+          pageNumber: 1,
+          pageSize: 10,
+        }
+      },
+    },
   },
   data() {
     return {
-      total: 400,
-      pageInfo: {
-        pageNumber: 1,
-        pageSize: 10,
-      },
       multipleSelection: [],
     }
   },
   methods: {
-    onEdit(row){},
-    onConfig(row){},
-    onDelete(row){},
+    onEdit(row) {
+      this.$emit('onEdit', row)
+    },
+    onConfig(row) {
+      this.$emit('onConfig', row)
+    },
+    onDelete(row) {
+      this.$emit('onDelete', row)
+    },
+    onChangePageInfo(pageInfo) {
+      this.$emit('update:pageInfo', pageInfo)
+    },
     onSizeChange(val) {
-      this.pageInfo.pageSize = val
+      this.onChangePageInfo({ ...this.pageInfo, pageSize: val })
     },
     onCurrentChange(val) {
-      this.pageInfo.pageNumber = val
+      this.onChangePageInfo({ ...this.pageInfo, pageNumber: val })
     },
     onSelectionChange(val) {
       this.multipleSelection = val

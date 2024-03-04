@@ -1,21 +1,10 @@
 <template>
   <div style="display: flex; gap: 10px; height: 100%" class="layout-page">
     <div style="flex: 1">
-      <el-form
-        :model="formData"
-        :rules="formRules"
-        ref="formRef"
-        label-width="auto"
-        class="demo-dynamic"
-      >
+      <el-form :model="formData" :rules="formRules" ref="formRef" label-width="auto" class="demo-dynamic">
         <el-form-item prop="type" label="适配器类型">
           <el-select v-model="formData.type" placeholder="请选择适配器类型">
-            <el-option
-              v-for="item in typeOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            <el-option v-for="item in typeOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="name" label="适配器名称">
@@ -45,12 +34,7 @@
           </el-col>
           <el-col :span="3" style="text-align: end">
             <el-button icon="el-icon-plus" circle @click="addElement" style="margin-right: 10px"></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              circle
-              @click.prevent="removeElement(item.id)"
-            ></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click.prevent="removeElement(item.id)"></el-button>
           </el-col>
         </el-row>
         <el-form-item>
@@ -66,12 +50,7 @@
           <el-form inline>
             <el-form-item prop="type" label="项目">
               <el-select v-model="projectId" placeholder="请选择项目" clearable>
-                <el-option
-                  v-for="item in projectList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
+                <el-option v-for="item in projectList" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -80,7 +59,7 @@
 
         <div class="code-json-editor">
           <vueJsonEditor
-            style="height:100%"
+            style="height: 100%"
             v-model="jsonContent"
             :show-btns="true"
             copyable
@@ -94,9 +73,7 @@
           ></vueJsonEditor>
         </div>
       </div>
-      <div
-        style="height: 50px; display: flex; justify-content: center; align-items: center; gap: 10px"
-      >
+      <div style="height: 50px; display: flex; justify-content: center; align-items: center; gap: 10px">
         <el-button type="primary" @click="parseJson">解析Json</el-button>
         <el-button type="primary" @click="clearJson">清空Json</el-button>
         <el-button type="primary" @click="downloadCompleteCode">下载完整项目代码</el-button>
@@ -108,7 +85,7 @@
 
 <script>
 import { nanoid } from 'nanoid'
-import { genAdapter, genProject } from '@/services/database.js'
+import { GenToolExtendService, GenExtendService } from '@/services'
 import { getGenerateJson, getProjectList } from '@/services/otherSystem.js'
 import vueJsonEditor from 'vue-json-editor'
 export default {
@@ -150,27 +127,27 @@ export default {
           },
         ],
       },
-      projectList:[]
+      projectList: [],
     }
   },
   components: {
     vueJsonEditor,
   },
-  mounted () {
-    this.getProjectList();
+  mounted() {
+    this.getProjectList()
   },
   methods: {
-    async getProjectList(){
+    async getProjectList() {
       try {
-        const {data} = await getProjectList()
-        this.projectList = data.map(item=>{
-        const { projectId,projectName } = item
-        return {
-          ...item,
-          label:projectName,
-          value:projectId,
-        }
-      })
+        const { data } = await getProjectList()
+        this.projectList = data.map((item) => {
+          const { projectId, projectName } = item
+          return {
+            ...item,
+            label: projectName,
+            value: projectId,
+          }
+        })
       } catch (error) {
         this.projectList = []
       }
@@ -186,8 +163,8 @@ export default {
       console.log('json错误了value:', value)
       this.hasJsonFlag = false
     },
-    async getGenerateJson(){
-      if(!this.projectId){
+    async getGenerateJson() {
+      if (!this.projectId) {
         this.$message.warning('请先选择项目')
       }
       const { data } = await getGenerateJson(this.projectId)
@@ -202,7 +179,7 @@ export default {
       //   generateJson = this.jsonContent
       // }
       if (generateJson) {
-        const file = await genProject(generateJson)
+        const file = await GenExtendService.genProject(generateJson)
         const href = URL.createObjectURL(file)
         const box = document.createElement('a')
         box.href = href
@@ -241,7 +218,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const { code } = await genAdapter(this.formData)
+          const { code } = await GenToolExtendService.genAdapter(this.formData)
           if (code == 0) {
             this.$message.success('操作成功')
           }
