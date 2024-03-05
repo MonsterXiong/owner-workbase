@@ -10,18 +10,18 @@
     </div>
     <div class="right-wrapper">
       <div class="top">
-        <el-button size="mini" type="primary"  @click="onPageDesign">设计页面</el-button>
-        <el-button size="mini" type="primary"  @click="onClearPage">清空页面</el-button>
+        <el-button size="mini" type="primary" @click="onPageDesign">设计页面</el-button>
+        <el-button size="mini" type="primary" @click="onClearPage">清空页面</el-button>
         <!-- <el-button size="mini" type="primary" >预览代码</el-button> -->
         <!-- <el-button size="mini" type="primary" >下载代码</el-button> -->
         <!-- <el-button size="mini" type="primary" >下载完整项目代码</el-button> -->
-        <el-button size="mini" type="primary"  @click="onAddComponentTemplate">添加页面模板</el-button>
+        <el-button size="mini" type="primary" @click="onAddComponentTemplate">添加页面模板</el-button>
       </div>
       <div class="bottom">
-        <SetPageConfig :currentActivePage="currentActivePage"></SetPageConfig>
+        <SetPageConfig :currentActivePage="currentActivePage" ref="setPageConfigRef"></SetPageConfig>
       </div>
     </div>
-    <PageDetailDialog @onClick="onClick" ref="pageDetailDialogRef" />
+    <PageDetailDialog @onClick="onChangeMenuType" ref="pageDetailDialogRef" />
     <AddComponentTemplateDialog @onSubmit="onAddComponentTemplate" ref="addComponentTemplateDialogRef" />
     <AddOrUpdateMenuDialog :projectId="projectId" @refresh="onRefreshMenuList" ref="AddOrUpdateMenuDialogRef" />
     <AddOrUpdateProjectDialog @refresh="onRefreshProjectList" ref="AddOrUpdateProjectDialogRef" />
@@ -34,9 +34,10 @@ import { PAGE_TYPE } from '../constant/pageType'
 import AddComponentTemplateDialog from './components/AddComponentTemplateDialog.vue'
 import AddOrUpdateMenuDialog from './components/AddOrUpdateMenuDialog.vue'
 import AddOrUpdateProjectDialog from '../project/components/AddOrUpdateProjectDialog.vue'
-import GenProjectSelect from '@/bizComponents/genProjectSelect/GenProjectSelect';
-import GenMenuTree from '@/bizComponents/genMenuTree/GenMenuTree';
+import GenProjectSelect from '@/bizComponents/genProjectSelect/GenProjectSelect'
+import GenMenuTree from '@/bizComponents/genMenuTree/GenMenuTree'
 import SetPageConfig from './components/SetPageConfig.vue'
+import { SfMenuDetailService } from '@/services'
 export default {
   data() {
     return {
@@ -46,16 +47,16 @@ export default {
       currentActivePage: {},
     }
   },
-  components: { GenProjectSelect,GenMenuTree,SetPageConfig,PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, AddOrUpdateProjectDialog },
+  components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, AddOrUpdateProjectDialog },
   methods: {
-    onRefreshProjectList(data){
+    onRefreshProjectList(data) {
       this.$refs.genProjectSelectRef.refresh()
       this.$refs.genProjectSelectRef.setCurrentKey(data.projectId)
     },
-    onCurrentMenu(menuData){
+    onCurrentMenu(menuData) {
       this.currentActivePage = menuData
     },
-    async onCurrentProject(projectId){
+    async onCurrentProject(projectId) {
       this.projectId = projectId
     },
     onAddProject() {
@@ -72,17 +73,31 @@ export default {
     onAddComponentTemplate() {
       this.$refs.addComponentTemplateDialogRef.show()
     },
-    onClick(pageType) {
-      if (!this.currentActivePage?.param) {
-        this.$set(this.currentActivePage, 'param', {})
+    async onChangeMenuType(paramData) {
+      const { categoryType, menuType } = paramData
+      const param = {
+        categoryType: categoryType ? categoryType : 'empty',
+        type: menuType ? menuType : 'empty',
       }
-      this.$set(this.currentActivePage['param'], 'type', pageType)
+      // 其他默认参数需要设置
+      const menuParam = JSON.stringify(param)
+      const menuDetailInfo = {
+        bindMenu: this.currentActivePage.menuId,
+        menuParam,
+      }
+      await SfMenuDetailService.saveSfMenuDetail(menuDetailInfo)
+      this.refreshPageConfig()
     },
     onPageDesign() {
       this.$refs.pageDetailDialogRef.show()
     },
-    onClearPage() {
-      this.currentActivePage.param = {}
+    async onClearPage() {
+      const menuDetailInfo = this.$refs.setPageConfigRef.getCurrentMenuDetail()
+      await SfMenuDetailService.deleteSfMenuDetailBatch([menuDetailInfo.menuDetailId])
+      this.refreshPageConfig()
+    },
+    refreshPageConfig() {
+      this.$refs.setPageConfigRef.refresh(this.currentActivePage.menuId)
     },
   },
 }
@@ -121,16 +136,16 @@ export default {
   }
 
   > .bottom {
-    width:100%;
+    width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 }
 
 .right-wrapper {
   flex: 1;
-  .top{
-    .el-button + .el-button{
-      margin-left:10px !important
+  .top {
+    .el-button + .el-button {
+      margin-left: 10px !important;
     }
   }
   > .bottom {

@@ -1,15 +1,21 @@
 export const PAGE_TYPE = {
-  GENERAL_FORM: 'generalForm',
   GENERAL_TABLE: 'generalTable',
   MERGE_TABLE: 'mergeTable',
   TREE_TABLE: 'treeTable',
   CARD_TABLE: 'cardTable',
-  EDIT_TABLE: 'editTable',
-  GENERAL_MATRIX: 'generalMatrix',
-
-
-  LEFT_LIST_RIGHT_TABLE: 'leftListRightTable',
-  LEFT_TREE_RIGHT_TABLE: 'leftTreeRightTable',
-  LEFT_TREE_RIGHT_GRAPH: 'leftTreeRightGraph',
-  /* Software Gen Code Placeholder */
+	EDIT_TABLE: 'editTable',
+	LEFT_LIST_RIGHT_TABLE: 'leftListRightTable',
+	LEFT_TREE_RIGHT_TABLE: 'leftTreeRightTable',
+	LEFT_TREE_RIGHT_ORG_GRAPH: 'leftTreeRightOrgGraph',
+	RELATION_MATRIX: 'relationMatrix',
+	GENERAL_FORM: 'generalForm',
+	TASK_ORG_GRAPH: 'taskOrgGraph',
+	OPERATIONAL_CONCEPT_GRAPH: 'operationalConceptGraph',
+	LEFT_CENTER_RIGHT_LAYOUT: 'leftCenterRightLayout',
+	TOP_CENTER_BOTTOM_LAYOUT: 'topCenterBottomLayout',
+	LEFT_LIST_RIGH_ORG_GRAPH: 'leftListRighOrgGraph',
+	LEFT_ORG_GRAPH_RIGHT_FORM: 'leftOrgGraphRightForm',
+	LEFT_LIST_CENTER_ORG_GRAPH_RIGHT_FORM_XYD: 'leftListCenterOrgGraphRightFormXyd',
+	ORG_GRAPH_TREE: 'orgGraphTree',
+	/* Software Gen Code Placeholder */
 }

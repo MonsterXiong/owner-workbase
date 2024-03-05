@@ -29,5 +29,13 @@ export const CATEGORY_LIST = [
     value: CATEGORY_TYPE.GLOBAL_DIALOG,
     label: '全局弹窗类',
   },
-  /* Software Gen Code Placeholder */
+  {
+    value: CATEGORY_TYPE.BIZ,
+    label: '业务类',
+  },
+	{
+    value: CATEGORY_TYPE.LAYOUT,
+    label: '布局类',
+  },
+	/* Software Gen Code Placeholder */
 ]

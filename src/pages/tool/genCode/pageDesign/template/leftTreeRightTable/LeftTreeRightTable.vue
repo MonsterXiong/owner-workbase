@@ -1,15 +1,3 @@
 <template>
-  <div>
-    左树右表格
-  </div>
+    <div>leftTreeRightTable-左树(列表)右表</div>
 </template>
-
-<script>
-  export default {
-
-  }
-</script>
-
-<style lang="less" scoped>
-
-</style>

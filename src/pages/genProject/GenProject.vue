@@ -12,7 +12,7 @@
 <script>
 import BaseList from '@/components/baseList'
 import FieldTable from './components/FieldTable'
-import { GenExtendService } from '@/services'
+import { DatabaseExtendService } from '@/services'
 export default {
   components: {
     BaseList,
@@ -168,7 +168,7 @@ export default {
       this.poolList = poolList
     },
     async getData(config) {
-      const { data } = await GenExtendService.getDatabaseData(config)
+      const { data } = await DatabaseExtendService.getDatabaseData(config)
       const { databaseList, tableList } = data
       this.databaseList = databaseList
       this.tableList = tableList
@@ -213,7 +213,7 @@ export default {
     },
     async onTableChange(tableId) {
       this.currentActiveTableId = tableId
-      const { data } = await GenExtendService.getFieldData(this.currentActiveDatabaseId, this.currentActiveTableId)
+      const { data } = await DatabaseExtendService.getFieldData(this.currentActiveDatabaseId, this.currentActiveTableId)
       this.currentFieldList = data
     },
   },

@@ -1,6 +1,6 @@
 import { service } from '../../http'
 
-export default class GenExtendService {
+export default class DatabaseExtendService {
   static async getDatabaseData(params) {
     return service.post('/database/getDatabaseData', params)
   }
