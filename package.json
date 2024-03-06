@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "npm run serve",
     "serve": "vue-cli-service serve  --mode dev",
-    "yyfdev": "vue-cli-service serve  --mode devyyf",
     "test": "vue-cli-service serve  --mode test",
     "build": "vue-cli-service build --mode prod",
     "build:test": "npm run build",
