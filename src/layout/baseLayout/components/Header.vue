@@ -12,7 +12,7 @@
         >
       </div>
       <div class="bottom-wrapper">
-        <span :class="{ active: currentActiveSubMenu == item.eventParams }" v-for="(item, index) in currentSubMenuList" :key="index" @click="onClick(item)">
+        <span :class="{ active: currentActiveSubMenu.startsWith(item.eventParams)}" v-for="(item, index) in currentSubMenuList" :key="index" @click="onClick(item)">
           <span :class="`iconfont ${item.icon}`" />
           {{ item.name }}
         </span>
@@ -36,7 +36,7 @@ export default {
     return {
       configData,
       menuData,
-      currentActiveMenu: MENU_CODE.TOOL,
+      currentActiveMenu: MENU_CODE.GEN_SOFTWARE,
       currentActiveSubMenu: '',
     }
   },

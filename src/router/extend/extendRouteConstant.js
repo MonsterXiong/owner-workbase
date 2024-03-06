@@ -73,5 +73,13 @@ const extendRouteConstant = {
     path: '/tool/genCode',
     name: 'GenCode',
   },
+  GEN_SF_PROJECT:{
+    path: '/gen/genSfProject',
+    name: 'GenSFProject',
+  },
+  GEN_PAGE_DESIGN:{
+    path: '/gen/genPageDesign',
+    name: 'GenPageDesign',
+  },
 }
 export default extendRouteConstant

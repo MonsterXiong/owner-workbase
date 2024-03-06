@@ -10,13 +10,9 @@ Vue.use(VueRouter)
 const currentRoutes = [
   {
     path:routesConstant.HOME.path,
-    redirect:routesConstant.GEN_ADAPTER.path,
+    redirect:routesConstant.GEN_PAGE_DESIGN.path,
     component: BaseLayout,
     children:[...baseRoutes,...routes,]
-  },
-  {
-    ...routesConstant.GEN_CODE,
-    component: () => import('@/pages/tool/genCode/GenCode.vue'),
   },
 ]
 

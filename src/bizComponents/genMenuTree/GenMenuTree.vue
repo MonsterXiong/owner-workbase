@@ -97,19 +97,22 @@ export default {
     width: 100%;
     display: flex;
     font-size: 14px;
-    padding: 0 5px;
-    line-height: 30px;
+    padding: 0 5px 0 10px;
+    line-height: 35px;
     border-bottom: 1px solid #eee
   }
 
   .add-icon {
     margin-left: auto;
     cursor: pointer;
+    font-weight:bold;
+    font-size:16px;
   }
 
   .tree-wrapper{
-    height: calc(100% - 31px);
-    overflow-y: auto
+    height: calc(100% - 36px);
+    overflow-y: auto;
+    background:#fff;
   }
 }
 </style>

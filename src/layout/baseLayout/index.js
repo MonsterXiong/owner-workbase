@@ -7,6 +7,7 @@ const MENU_CODE = {
   OTHER: 'other',
   TEST_DEMO:'test-demo',
   TOOL:'tool',
+  GEN_SOFTWARE:'gen-software',
 }
 
 const MENU_ITEM_CODE = {
@@ -22,6 +23,34 @@ const MENU_ITEM_CODE = {
   RESOURCE_CSS:'resource-css',
 }
 
+const genMenuData = [
+  {
+    menuCode: MENU_CODE.GEN_SOFTWARE,
+    name: '代码生成项目',
+    parent: null,
+    icon: 'icon-a-ziyuan22',
+    type: VIEW_TYPE.VIEW_MODULE,
+    disabled: false,
+  },
+  {
+    menuCode: 'gen-project',
+    name: '项目列表',
+    parent: MENU_CODE.GEN_SOFTWARE,
+    icon: 'icon-shouye',
+    type: VIEW_TYPE.VIEW_PAGE,
+    eventType: EMIT_TYPE.PAGE,
+    eventParams: routesConstant.GEN_SF_PROJECT.path,
+  },
+  {
+    menuCode: 'page-design',
+    name: '页面设计',
+    parent: MENU_CODE.GEN_SOFTWARE,
+    icon: 'icon-shouye',
+    type: VIEW_TYPE.VIEW_PAGE,
+    eventType: EMIT_TYPE.PAGE,
+    eventParams: routesConstant.GEN_PAGE_DESIGN.path,
+  },
+]
 const toolMenuData = [
   {
     menuCode: MENU_CODE.TOOL,
@@ -39,15 +68,6 @@ const toolMenuData = [
     type: VIEW_TYPE.VIEW_PAGE,
     eventType: EMIT_TYPE.PAGE,
     eventParams: routesConstant.GEN_ADAPTER.path,
-  },
-  {
-    menuCode: 'gen-code',
-    name: '代码生成',
-    parent: MENU_CODE.TOOL,
-    icon: 'icon-shouye',
-    type: VIEW_TYPE.VIEW_PAGE,
-    eventType: EMIT_TYPE.PAGE,
-    eventParams: routesConstant.GEN_CODE.path,
   },
 ]
 
@@ -72,30 +92,30 @@ const testMenuData = [
 ]
 
 const menuData = [
-  {
-    menuCode: MENU_CODE.FE_WORKSPACE,
-    name: '前端工作台',
-    parent: null,
-    icon: 'icon-a-ziyuan22',
-    type: VIEW_TYPE.VIEW_MODULE,
-    disabled: false,
-  },
-  {
-    menuCode: MENU_CODE.GEN_PLATFORM,
-    name: '代码生成平台',
-    parent: null,
-    icon: 'icon-a-ziyuan22',
-    type: VIEW_TYPE.VIEW_MODULE,
-    disabled: false,
-  },
-  {
-    menuCode: MENU_CODE.OTHER,
-    name: '其它',
-    parent: null,
-    icon: 'icon-a-ziyuan22',
-    type: VIEW_TYPE.VIEW_MODULE,
-    disabled: true,
-  },
+  // {
+  //   menuCode: MENU_CODE.FE_WORKSPACE,
+  //   name: '前端工作台',
+  //   parent: null,
+  //   icon: 'icon-a-ziyuan22',
+  //   type: VIEW_TYPE.VIEW_MODULE,
+  //   disabled: false,
+  // },
+  // {
+  //   menuCode: MENU_CODE.GEN_PLATFORM,
+  //   name: '代码生成平台',
+  //   parent: null,
+  //   icon: 'icon-a-ziyuan22',
+  //   type: VIEW_TYPE.VIEW_MODULE,
+  //   disabled: false,
+  // },
+  // {
+  //   menuCode: MENU_CODE.OTHER,
+  //   name: '其它',
+  //   parent: null,
+  //   icon: 'icon-a-ziyuan22',
+  //   type: VIEW_TYPE.VIEW_MODULE,
+  //   disabled: true,
+  // },
   {
     menuCode: MENU_ITEM_CODE.HOME_NAV,
     name: '首页导航',
@@ -186,8 +206,9 @@ const menuData = [
     eventType: EMIT_TYPE.PAGE,
     eventParams: routesConstant.RESOURCE_CSS.path,
   },
-  ...testMenuData,
-  ...toolMenuData
+  // ...testMenuData,
+  ...toolMenuData,
+  ...genMenuData
 ]
 
 export { MENU_CODE, menuData }

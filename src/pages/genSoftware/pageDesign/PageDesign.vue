@@ -124,12 +124,14 @@ export default {
   gap: 10px;
 
   > .top {
+    background-color: rgba(255, 255, 255, .5);
     padding-left: 5px;
     line-height: 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 
   > .bottom {
+    background-color: rgba(255, 255, 255, .5);
     height: calc(100% - 50px);
   }
 }
