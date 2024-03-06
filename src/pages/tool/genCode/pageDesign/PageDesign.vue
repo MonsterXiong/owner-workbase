@@ -14,8 +14,8 @@
         <el-button size="mini" type="primary" @click="onClearPage">清空页面</el-button>
         <!-- <el-button size="mini" type="primary" >预览代码</el-button> -->
         <!-- <el-button size="mini" type="primary" >下载代码</el-button> -->
-        <!-- <el-button size="mini" type="primary" >下载完整项目代码</el-button> -->
-        <el-button size="mini" type="primary" @click="onAddComponentTemplate">添加页面模板</el-button>
+        <el-button size="mini" @click="onDownloadCompleteCode">下载完整项目代码</el-button>
+        <el-button size="mini" @click="onAddComponentTemplate">添加页面模板</el-button>
       </div>
       <div class="bottom">
         <SetPageConfig :currentActivePage="currentActivePage" ref="setPageConfigRef"></SetPageConfig>
@@ -37,7 +37,7 @@ import AddOrUpdateProjectDialog from '../project/components/AddOrUpdateProjectDi
 import GenProjectSelect from '@/bizComponents/genProjectSelect/GenProjectSelect'
 import GenMenuTree from '@/bizComponents/genMenuTree/GenMenuTree'
 import SetPageConfig from './components/SetPageConfig.vue'
-import { SfMenuDetailService } from '@/services'
+import { SfMenuDetailService, GenExtendService } from '@/services'
 export default {
   data() {
     return {
@@ -49,6 +49,13 @@ export default {
   },
   components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, AddOrUpdateProjectDialog },
   methods: {
+    async onDownloadCompleteCode() {
+      const file = await GenExtendService.genSfProjectByProjectId(this.projectId)
+      const href = URL.createObjectURL(file)
+      const box = document.createElement('a')
+      box.href = href
+      box.click()
+    },
     onRefreshProjectList(data) {
       this.$refs.genProjectSelectRef.refresh()
       this.$refs.genProjectSelectRef.setCurrentKey(data.projectId)

@@ -1,11 +1,11 @@
 import { service } from '@/services/http'
 
 /**
- * 关于数据池的服务
+ * 关于菜单详情的服务
  */
 export default class SfMenuDetailService {
   /**
-   * @description 删除数据池(批量、递归)
+   * @description 删除菜单详情(批量、递归)
    * @returns
    */
   static async deleteSfMenuDetailBatch(menuDetailIdList) {
@@ -13,7 +13,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 导入数据池模板下载
+   * @description 导入菜单详情模板下载
    * @returns
    */
   static async downloadSfMenuDetailTemplate() {
@@ -21,7 +21,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 导出数据池
+   * @description 导出菜单详情
    * @param {Object} queryCondition 查询条件
    * @returns
    */
@@ -32,8 +32,8 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 获取数据池
-   * @param {String} menuDetailId 数据池主键
+   * @description 获取菜单详情
+   * @param {String} menuDetailId 菜单详情主键
    * @returns
    */
   static async getSfMenuDetail(menuDetailId) {
@@ -41,7 +41,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 导入数据池
+   * @description 导入菜单详情
    * @param {File} file 文件对象
    * @returns
    */
@@ -50,7 +50,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 增加数据池
+   * @description 增加菜单详情
    * @returns
    */
   static async insertSfMenuDetail(params) {
@@ -58,7 +58,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 增加数据池(批量)
+   * @description 增加菜单详情(批量)
    * @returns
    */
   static async insertSfMenuDetailBatch(sfMenuDetailList) {
@@ -66,7 +66,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 查询数据池列表结果
+   * @description 查询菜单详情列表结果
    * @param {Object} queryCondition 查询条件
    * @returns
    */
@@ -75,7 +75,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 保存数据池
+   * @description 保存菜单详情
    * @returns
    */
   static async saveSfMenuDetail(sfMenuDetailDTO) {
@@ -83,7 +83,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 保存数据池(批量)
+   * @description 保存菜单详情(批量)
    * @returns
    */
   static async saveSfMenuDetailBatch(params) {
@@ -91,7 +91,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 修改数据池
+   * @description 修改菜单详情
    * @returns
    */
   static async updateSfMenuDetail(params) {
@@ -99,7 +99,7 @@ export default class SfMenuDetailService {
   }
 
   /**
-   * @description 修改数据池(批量)
+   * @description 修改菜单详情(批量)
    * @returns
    */
   static async updateSfMenuDetailBatch(sfMenuDetailList) {

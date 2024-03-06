@@ -6,4 +6,7 @@ export default class GenExtendService {
       responseType: 'blob',
     })
   }
+  static async genSfProjectByProjectId(projectId) {
+    return service.postQueryToBlob(`gen/genSfProjectByProjectId`, { projectId })
+  }
 }

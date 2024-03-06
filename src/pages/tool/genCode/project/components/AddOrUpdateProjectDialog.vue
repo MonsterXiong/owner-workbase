@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { SfProjectService } from '@/services'
+import { SfProjectExtendService } from '@/services'
 export default {
   data() {
     return {
@@ -45,8 +45,8 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const { data } = await SfProjectService.saveSfProject(this.formData)
-          this.$emit('refresh',data)
+          const { data } = await SfProjectExtendService.saveProject(this.formData)
+          this.$emit('refresh', data)
           this.onDialogClose()
         } else {
           console.log('error submit!!')

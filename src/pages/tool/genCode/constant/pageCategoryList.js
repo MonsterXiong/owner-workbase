@@ -1,4 +1,4 @@
-import { CATEGORY_TYPE } from './pageCategoryType';
+import { CATEGORY_TYPE } from './pageCategoryType'
 
 export const CATEGORY_LIST = [
   {
@@ -26,16 +26,16 @@ export const CATEGORY_LIST = [
     label: '列表类',
   },
   {
-    value: CATEGORY_TYPE.GLOBAL_DIALOG,
-    label: '全局弹窗类',
+    value: CATEGORY_TYPE.LAYOUT,
+    label: '布局类',
   },
   {
     value: CATEGORY_TYPE.BIZ,
     label: '业务类',
   },
-	{
-    value: CATEGORY_TYPE.LAYOUT,
-    label: '布局类',
+  {
+    value: CATEGORY_TYPE.GLOBAL_DIALOG,
+    label: '全局弹窗类',
   },
-	/* Software Gen Code Placeholder */
+  /* Software Gen Code Placeholder */
 ]

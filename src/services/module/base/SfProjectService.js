@@ -1,4 +1,4 @@
-import { service } from '../../http/index.js'
+import { service } from '@/services/http'
 
 /**
  * 关于项目的服务

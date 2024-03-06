@@ -17,6 +17,8 @@ import LeftListRighOrgGraph from './leftListRighOrgGraph/LeftListRighOrgGraph.vu
 import LeftOrgGraphRightForm from './leftOrgGraphRightForm/LeftOrgGraphRightForm.vue'
 import LeftListCenterOrgGraphRightFormXyd from './leftListCenterOrgGraphRightFormXyd/LeftListCenterOrgGraphRightFormXyd.vue'
 import OrgGraphTree from './orgGraphTree/OrgGraphTree.vue'
+import LeftListCenterGeneralGraphRightFormXyd from './leftListCenterGeneralGraphRightFormXyd/LeftListCenterGeneralGraphRightFormXyd.vue'
+import GeneralMatrix from './generalMatrix/GeneralMatrix.vue'
 /* Software Gen Code Require Placeholder */
 
 export const COMPONENT_MAP = {
@@ -38,5 +40,7 @@ export const COMPONENT_MAP = {
 	[PAGE_TYPE.LEFT_ORG_GRAPH_RIGHT_FORM]: LeftOrgGraphRightForm,
 	[PAGE_TYPE.LEFT_LIST_CENTER_ORG_GRAPH_RIGHT_FORM_XYD]: LeftListCenterOrgGraphRightFormXyd,
 	[PAGE_TYPE.ORG_GRAPH_TREE]: OrgGraphTree,
+	[PAGE_TYPE.LEFT_LIST_CENTER_GENERAL_GRAPH_RIGHT_FORM_XYD]: LeftListCenterGeneralGraphRightFormXyd,
+	[PAGE_TYPE.GENERAL_MATRIX]: GeneralMatrix,
 	/* Software Gen Code Placeholder */
 }

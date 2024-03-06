@@ -44,6 +44,11 @@ export const PAGE_LIST = [
   },
   {
     category: CATEGORY_TYPE.MATRIX,
+    value: PAGE_TYPE.GENERAL_MATRIX,
+    label: '通用矩阵',
+  },
+  {
+    category: CATEGORY_TYPE.MATRIX,
     value: PAGE_TYPE.RELATION_MATRIX,
     label: '关系矩阵',
   },
@@ -77,20 +82,25 @@ export const PAGE_LIST = [
     value: PAGE_TYPE.LEFT_LIST_RIGH_ORG_GRAPH,
     label: '左列表右组织图',
   },
-	{
+  {
     category: CATEGORY_TYPE.COMPOSE,
     value: PAGE_TYPE.LEFT_ORG_GRAPH_RIGHT_FORM,
     label: '左组织图右表单',
   },
-	{
+  {
     category: CATEGORY_TYPE.BIZ,
     value: PAGE_TYPE.LEFT_LIST_CENTER_ORG_GRAPH_RIGHT_FORM_XYD,
     label: '左列表中组织图右表单(新一代)',
   },
-	{
+  {
     category: CATEGORY_TYPE.TREE,
     value: PAGE_TYPE.ORG_GRAPH_TREE,
     label: '组织图',
   },
-	/* Software Gen Code Placeholder */
+  {
+    category: CATEGORY_TYPE.BIZ,
+    value: PAGE_TYPE.LEFT_LIST_CENTER_GENERAL_GRAPH_RIGHT_FORM_XYD,
+    label: '左列表中普通绘图右表单(新一代)',
+  },
+  /* Software Gen Code Placeholder */
 ]
