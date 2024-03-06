@@ -1,11 +1,11 @@
 <template>
-  <div class="common-page">
+  <div class="common-page set-page-config">
     <template v-if="isModule">
       <div>这是模块</div>
     </template>
     <template v-else>
       <template v-if="currentComponent">
-        <component :is="currentComponent"></component>
+        <component :is="currentComponent" :projectId="projectId"></component>
       </template>
       <template v-else>空页面</template>
     </template>
@@ -24,6 +24,7 @@ export default {
     }
   },
   props: {
+    projectId:{},
     currentActivePage: {},
   },
   computed: {
@@ -68,4 +69,8 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.set-page-config{
+  padding: 10px
+}
+</style>

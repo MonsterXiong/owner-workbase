@@ -18,7 +18,7 @@
         <el-button size="mini" @click="onAddComponentTemplate">添加页面模板</el-button>
       </div>
       <div class="bottom">
-        <SetPageConfig :currentActivePage="currentActivePage" ref="setPageConfigRef"></SetPageConfig>
+        <SetPageConfig :projectId="projectId" :currentActivePage="currentActivePage" ref="setPageConfigRef"></SetPageConfig>
       </div>
     </div>
     <PageDetailDialog @onClick="onChangeMenuType" ref="pageDetailDialogRef" />

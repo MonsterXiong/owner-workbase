@@ -78,22 +78,22 @@ const testMenuData = [
 ]
 
 const menuData = [
-  {
-    menuCode: MENU_CODE.FE_WORKSPACE,
-    name: '前端工作台',
-    parent: null,
-    icon: 'icon-a-ziyuan22',
-    type: VIEW_TYPE.VIEW_MODULE,
-    disabled: false,
-  },
-  {
-    menuCode: MENU_CODE.GEN_PLATFORM,
-    name: '代码生成平台',
-    parent: null,
-    icon: 'icon-a-ziyuan22',
-    type: VIEW_TYPE.VIEW_MODULE,
-    disabled: false,
-  },
+  // {
+  //   menuCode: MENU_CODE.FE_WORKSPACE,
+  //   name: '前端工作台',
+  //   parent: null,
+  //   icon: 'icon-a-ziyuan22',
+  //   type: VIEW_TYPE.VIEW_MODULE,
+  //   disabled: false,
+  // },
+  // {
+  //   menuCode: MENU_CODE.GEN_PLATFORM,
+  //   name: '代码生成平台',
+  //   parent: null,
+  //   icon: 'icon-a-ziyuan22',
+  //   type: VIEW_TYPE.VIEW_MODULE,
+  //   disabled: false,
+  // },
   {
     menuCode: 'home-nav',
     name: '首页导航',
@@ -113,7 +113,7 @@ const menuData = [
     eventParams: routesConstant.GEN_PROJECT.path,
   },
   // ...testMenuData,
-  ...toolMenuData,
+  // ...toolMenuData,
   ...genMenuData
 ]
 
