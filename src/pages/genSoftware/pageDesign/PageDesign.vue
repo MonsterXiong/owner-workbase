@@ -10,11 +10,13 @@
     </div>
     <div class="right-wrapper">
       <div class="top">
-        <el-button size="mini" type="primary" @click="onPageDesign">设计页面</el-button>
-        <el-button size="mini" type="primary" @click="onClearPage">清空页面</el-button>
-        <!-- <el-button size="mini" type="primary" >预览代码</el-button> -->
-        <!-- <el-button size="mini" type="primary" >下载代码</el-button> -->
-        <el-button size="mini" @click="onDownloadCompleteCode">下载完整项目代码</el-button>
+        <template v-if="isPage">
+          <el-button size="mini" type="primary" @click="onPageDesign">设计页面</el-button>
+          <el-button size="mini" type="danger" @click="onClearPage">清空页面</el-button>
+          <el-button size="mini" @click="onPriviewPageCode">预览当前页面代码</el-button>
+          <el-button size="mini" @click="onDownloadPageCode">下载当前页面代码</el-button>
+        </template>
+        <el-button size="mini" style="margin-left: auto" @click="onDownloadCompleteCode">下载完整项目代码</el-button>
         <el-button size="mini" @click="onAddComponentTemplate">添加页面模板</el-button>
       </div>
       <div class="bottom">
@@ -47,14 +49,38 @@ export default {
       currentActivePage: {},
     }
   },
+  computed: {
+    currentMenuId() {
+      return this.currentActivePage.menuId
+    },
+    isPage() {
+      return this.currentActivePage?.menuType == 'page'
+    },
+  },
   components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, AddOrUpdateProjectDialog },
   methods: {
-    async onDownloadCompleteCode() {
-      const file = await GenExtendService.genSfProjectByProjectId(this.projectId)
+    downloadFile(file) {
       const href = URL.createObjectURL(file)
       const box = document.createElement('a')
       box.href = href
       box.click()
+    },
+    async onPriviewPageCode() {
+      if (!this.currentMenuId) {
+        return this.$message.warning('请选择页面')
+      }
+      await GenExtendService.genSfPageCodeByMenuId(this.currentMenuId)
+    },
+    async onDownloadPageCode() {
+      if (!this.currentMenuId) {
+        return this.$message.warning('请选择页面')
+      }
+      const file = await GenExtendService.downloadSfPageCodeByMenuId(this.currentMenuId)
+      this.downloadFile(file)
+    },
+    async onDownloadCompleteCode() {
+      const file = await GenExtendService.genSfProjectByProjectId(this.projectId)
+      this.downloadFile(file)
     },
     onRefreshProjectList(data) {
       this.$refs.genProjectSelectRef.refresh()
@@ -124,14 +150,14 @@ export default {
   gap: 10px;
 
   > .top {
-    background-color: rgba(255, 255, 255, .5);
+    background-color: rgba(255, 255, 255, 0.5);
     padding-left: 5px;
     line-height: 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 
   > .bottom {
-    background-color: rgba(255, 255, 255, .5);
+    background-color: rgba(255, 255, 255, 0.5);
     height: calc(100% - 50px);
   }
 }

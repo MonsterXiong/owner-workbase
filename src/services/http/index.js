@@ -4,8 +4,8 @@ const isObject = (obj) => {
   return Object.prototype.toString.call(obj) === '[object Object]'
 }
 const axiosConfig = {
-  // baseURL: 'http://192.168.2.190:3000',
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://192.168.2.190:3000',
+  // baseURL: 'http://localhost:3000',
   timeout: 100000,
   headers: {
     'Content-Type': 'application/json',

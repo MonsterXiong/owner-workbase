@@ -19,5 +19,7 @@ export const PAGE_TYPE = {
 	ORG_GRAPH_TREE: 'orgGraphTree',
 	LEFT_LIST_CENTER_GENERAL_GRAPH_RIGHT_FORM_XYD: 'leftListCenterGeneralGraphRightFormXyd',
 	GENERAL_MATRIX: 'generalMatrix',
+	LEFT_LIST_RIGHT_RELATION_MATRIX: 'leftListRightRelationMatrix',
+	READ_ONLY_WORD: 'readOnlyWord',
 	/* Software Gen Code Placeholder */
 }

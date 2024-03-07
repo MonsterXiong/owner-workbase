@@ -37,5 +37,9 @@ export const CATEGORY_LIST = [
     value: CATEGORY_TYPE.GLOBAL_DIALOG,
     label: '全局弹窗类',
   },
-  /* Software Gen Code Placeholder */
+  {
+    value: CATEGORY_TYPE.OTHER,
+    label: '其它类',
+  },
+	/* Software Gen Code Placeholder */
 ]

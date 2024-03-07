@@ -4,9 +4,9 @@ import routesConstant from '@/router/routesConstant'
 const MENU_CODE = {
   FE_WORKSPACE: 'fe-workspace',
   GEN_PLATFORM: 'gen-platform',
-  TEST_DEMO:'test-demo',
-  TOOL:'tool',
-  GEN_SOFTWARE:'gen-software',
+  TEST_DEMO: 'test-demo',
+  TOOL: 'tool',
+  GEN_SOFTWARE: 'gen-software',
 }
 
 const genMenuData = [
@@ -114,7 +114,7 @@ const menuData = [
   },
   // ...testMenuData,
   // ...toolMenuData,
-  ...genMenuData
+  ...genMenuData,
 ]
 
 export { MENU_CODE, menuData }

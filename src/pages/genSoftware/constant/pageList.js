@@ -102,5 +102,15 @@ export const PAGE_LIST = [
     value: PAGE_TYPE.LEFT_LIST_CENTER_GENERAL_GRAPH_RIGHT_FORM_XYD,
     label: '左列表中普通绘图右表单(新一代)',
   },
-  /* Software Gen Code Placeholder */
+  {
+    category: CATEGORY_TYPE.COMPOSE,
+    value: PAGE_TYPE.LEFT_LIST_RIGHT_RELATION_MATRIX,
+    label: '左列表右关系矩阵',
+  },
+	{
+    category: CATEGORY_TYPE.OTHER,
+    value: PAGE_TYPE.READ_ONLY_WORD,
+    label: '只读Word',
+  },
+	/* Software Gen Code Placeholder */
 ]
