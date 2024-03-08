@@ -21,6 +21,7 @@ import LeftListCenterGeneralGraphRightFormXyd from './leftListCenterGeneralGraph
 import GeneralMatrix from './generalMatrix/GeneralMatrix.vue'
 import LeftListRightRelationMatrix from './leftListRightRelationMatrix/LeftListRightRelationMatrix.vue'
 import ReadOnlyWord from './readOnlyWord/ReadOnlyWord.vue'
+import WeightMatrix from './weightMatrix/WeightMatrix.vue'
 /* Software Gen Code Require Placeholder */
 
 export const COMPONENT_MAP = {
@@ -46,5 +47,6 @@ export const COMPONENT_MAP = {
 	[PAGE_TYPE.GENERAL_MATRIX]: GeneralMatrix,
 	[PAGE_TYPE.LEFT_LIST_RIGHT_RELATION_MATRIX]: LeftListRightRelationMatrix,
 	[PAGE_TYPE.READ_ONLY_WORD]: ReadOnlyWord,
+	[PAGE_TYPE.WEIGHT_MATRIX]: WeightMatrix,
 	/* Software Gen Code Placeholder */
 }

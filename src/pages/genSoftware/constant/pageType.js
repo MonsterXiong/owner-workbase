@@ -21,5 +21,6 @@ export const PAGE_TYPE = {
 	GENERAL_MATRIX: 'generalMatrix',
 	LEFT_LIST_RIGHT_RELATION_MATRIX: 'leftListRightRelationMatrix',
 	READ_ONLY_WORD: 'readOnlyWord',
+	WEIGHT_MATRIX: 'weightMatrix',
 	/* Software Gen Code Placeholder */
 }

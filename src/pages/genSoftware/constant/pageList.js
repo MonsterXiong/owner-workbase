@@ -112,5 +112,10 @@ export const PAGE_LIST = [
     value: PAGE_TYPE.READ_ONLY_WORD,
     label: '只读Word',
   },
+	{
+    category: CATEGORY_TYPE.MATRIX,
+    value: PAGE_TYPE.WEIGHT_MATRIX,
+    label: '权重矩阵',
+  },
 	/* Software Gen Code Placeholder */
 ]
