@@ -22,5 +22,6 @@ export const PAGE_TYPE = {
 	LEFT_LIST_RIGHT_RELATION_MATRIX: 'leftListRightRelationMatrix',
 	READ_ONLY_WORD: 'readOnlyWord',
 	WEIGHT_MATRIX: 'weightMatrix',
+	CRUD_TABLE: 'crudTable',
 	/* Software Gen Code Placeholder */
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="general-table">
-    <div>general_table-通用表格-有</div>
+    <div>general_table-通用表格-有-开始对数据和物理模型了-字段</div>
     <SelectDbTable :projectId="projectId" @onChange="onChangeTableName"></SelectDbTable>
   </div>
 </template>

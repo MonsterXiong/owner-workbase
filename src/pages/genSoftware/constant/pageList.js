@@ -117,5 +117,10 @@ export const PAGE_LIST = [
     value: PAGE_TYPE.WEIGHT_MATRIX,
     label: '权重矩阵',
   },
+	{
+    category: CATEGORY_TYPE.TABLE,
+    value: PAGE_TYPE.CRUD_TABLE,
+    label: 'Crud表格',
+  },
 	/* Software Gen Code Placeholder */
 ]

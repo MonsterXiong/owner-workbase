@@ -22,7 +22,10 @@ import GeneralMatrix from './generalMatrix/GeneralMatrix.vue'
 import LeftListRightRelationMatrix from './leftListRightRelationMatrix/LeftListRightRelationMatrix.vue'
 import ReadOnlyWord from './readOnlyWord/ReadOnlyWord.vue'
 import WeightMatrix from './weightMatrix/WeightMatrix.vue'
+import CrudTable from './crudTable/CrudTable.vue'
 /* Software Gen Code Require Placeholder */
+
+// 可以使用自动导入隐射出一个动态组件MAP
 
 export const COMPONENT_MAP = {
   [PAGE_TYPE.GENERAL_TABLE]: GeneralTable,
@@ -48,5 +51,6 @@ export const COMPONENT_MAP = {
 	[PAGE_TYPE.LEFT_LIST_RIGHT_RELATION_MATRIX]: LeftListRightRelationMatrix,
 	[PAGE_TYPE.READ_ONLY_WORD]: ReadOnlyWord,
 	[PAGE_TYPE.WEIGHT_MATRIX]: WeightMatrix,
+	[PAGE_TYPE.CRUD_TABLE]: CrudTable,
 	/* Software Gen Code Placeholder */
 }
