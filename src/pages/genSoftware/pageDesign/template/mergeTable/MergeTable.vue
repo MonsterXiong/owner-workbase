@@ -1,3 +1,21 @@
 <template>
-  <div class="common-page">merge_table-合并表格-有</div>
+  <div class="common-page">
+    <SplitLayout :projectId="projectId" title="合并表格配置">
+      合并表格配置
+    </SplitLayout>
+  </div>
 </template>
+<script>
+import SplitLayout from '@/bizComponents/splitLayout/SplitLayout.vue';
+export default {
+  props: {
+    projectId: {},
+    menuDetailInfo: {}
+  },
+  components: {
+    SplitLayout
+  },
+}
+</script>
+<style lang="less" scoped>
+</style>

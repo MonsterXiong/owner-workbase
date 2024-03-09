@@ -1,3 +1,27 @@
 <template>
-  <div class="common-page">left_list_center_org_graph_right_form_xyd-左列表中组织图右表单(新一代)-有</div>
+  <div class="common-page">
+    <SplitLayout leftTitle="列表" title="组织图" rightTitle="表单">
+      <template #left>
+        列表
+      </template>
+        组织图
+      <template #right>
+        表单
+      </template>
+    </SplitLayout>
+  </div>
 </template>
+<script>
+import SplitLayout from '@/bizComponents/splitLayout/SplitLayout.vue';
+export default {
+  props: {
+    projectId: {},
+    menuDetailInfo: {}
+  },
+  components: {
+    SplitLayout
+  },
+}
+</script>
+<style lang="less" scoped>
+</style>

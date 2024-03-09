@@ -1,3 +1,24 @@
 <template>
-  <div class="common-page">leftTreeRightTable-左树(列表)右表-有</div>
+  <div class="common-page">
+    <SplitLayout :projectId="projectId" leftTitle="树（列表）" title="表格">
+      <template #left>
+        树（列表）
+      </template>
+        表格
+    </SplitLayout>
+  </div>
 </template>
+<script>
+import SplitLayout from '@/bizComponents/splitLayout/SplitLayout.vue';
+export default {
+  props: {
+    projectId: {},
+    menuDetailInfo: {}
+  },
+  components: {
+    SplitLayout
+  },
+}
+</script>
+<style lang="less" scoped>
+</style>

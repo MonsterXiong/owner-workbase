@@ -37,7 +37,7 @@ export default {
       if (newValue?.length) {
         this.currentValue = ''
         this.tableList = newValue
-        this.setDefault(newValue)
+        // this.setDefault(newValue)
       }
     },
   },

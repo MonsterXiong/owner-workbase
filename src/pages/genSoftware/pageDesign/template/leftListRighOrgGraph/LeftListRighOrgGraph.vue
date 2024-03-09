@@ -1,3 +1,34 @@
 <template>
-  <div class="common-page">leftListRighOrgGraph-左列表右组织图-有</div>
+  <div class="common-page">
+    <SplitLayout :projectId="projectId" leftTitle="列表" title="组织图">
+      <template #left>
+        列表
+      </template>
+      组织图
+    </SplitLayout>
+  </div>
 </template>
+<script>
+
+import SplitLayout from '@/bizComponents/splitLayout/SplitLayout.vue';
+export default {
+  props: {
+    projectId: {},
+    menuDetailInfo: {}
+  },
+  data() {
+    return {
+      tableList: []
+    }
+  },
+  components: {
+    SplitLayout
+  },
+
+  methods: {
+
+  },
+}
+</script>
+<style lang="less" scoped>
+</style>
