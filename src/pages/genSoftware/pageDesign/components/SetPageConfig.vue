@@ -5,7 +5,15 @@
     </template>
     <template v-else>
       <template v-if="currentComponent">
-        <component :is="currentComponent" :projectId="projectId"></component>
+        <div class="common-page">
+          <div style="border:1px dashed #999;display: flex;align-items: center;padding:0 5px;margin-bottom:5px;">
+            <div style="flex:1;font-size:16px;font-weight: bold;text-align: center;">{{currentComponentName}}</div>
+            <el-button type="text" style="margin-left:auto" @click="onSave">保存</el-button>
+          </div>
+          <div style="height:calc(100% - 45px);">
+            <component :is="currentComponent" :projectId="projectId" :menuDetailInfo="currentMenuDetail"  ref="dynamicCompRef"></component>
+          </div>
+        </div>
       </template>
       <template v-else>空页面</template>
     </template>
@@ -16,6 +24,8 @@
 import { COMPONENT_MAP } from '../template/index'
 import { SfMenuDetailService } from '@/services'
 import QueryConditionBuilder from '@/utils/queryConditionBuilder'
+import { PAGE_LIST } from '../../constant/pageList'
+import { CATEGORY_LIST } from '../../constant/pageCategoryList'
 export default {
   data() {
     return {
@@ -34,15 +44,38 @@ export default {
     currentComponent() {
       return COMPONENT_MAP[this.menuParam?.type]
     },
+    currentComponentName(){
+      const {categoryType,type } = this.menuParam
+      const typeName = PAGE_LIST.find(item=>item.value === type)?.label
+      const categoryName = CATEGORY_LIST.find(item=>item.value === categoryType)?.label
+      return `${categoryName} - ${typeName}`
+    }
   },
   watch: {
     currentActivePage(newValue) {
       if (newValue.menuId) {
-        this.getMenuDetail()
+        this.$nextTick(()=>{
+          this.getMenuDetail()
+        })
       }
     },
   },
   methods: {
+    async onSave(){
+      const templateParam = this.$refs.dynamicCompRef.getInfo()
+      const pageConfigInfo = {
+        ...this.menuParam,
+        templateParam
+      }
+      await SfMenuDetailService.saveSfMenuDetail({
+        menuDetailId:this.currentMenuDetail?.menuDetailId || '',
+        bindMenu: this.currentActivePage.menuId,
+        menuParam:JSON.stringify(pageConfigInfo)
+      })
+      this.$message.success('保存成功')
+      this.getMenuDetail()
+
+    },
     refresh(menuId) {
       this.getMenuDetail(menuId)
     },

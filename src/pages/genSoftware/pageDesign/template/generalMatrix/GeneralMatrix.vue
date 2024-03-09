@@ -1,3 +1,3 @@
 <template>
-  <div>generalMatrix-通用矩阵-有</div>
+  <div class="common-page">generalMatrix-通用矩阵-有</div>
 </template>

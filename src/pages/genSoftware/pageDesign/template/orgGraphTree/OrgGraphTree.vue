@@ -1,5 +1,5 @@
 <template>
-  <div class="org-graph-tree">
+  <div class="common-page org-graph-tree">
     <div>org_graph_tree-组织图-有</div>
     <div>存在多个表进行数据清洗 => 属性选择，展示名称，唯一标识，父id</div>
     <SelectDbTable :projectId="projectId" @onChange="onChangeTableName"></SelectDbTable>

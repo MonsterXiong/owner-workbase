@@ -111,6 +111,7 @@ export default {
       const param = {
         categoryType: categoryType ? categoryType : 'empty',
         type: menuType ? menuType : 'empty',
+        templateParam:{}
       }
       // 其他默认参数需要设置
       const menuParam = JSON.stringify(param)

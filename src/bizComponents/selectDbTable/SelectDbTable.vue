@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       tableList: [],
-      currentValue: ''
+      currentValue: '',
     }
   },
   methods: {
@@ -54,10 +54,17 @@ export default {
         this.onChange(this.currentValue)
       }
     },
+    setCurrentValue(value){
+      this.currentValue = value
+      this.onChange(this.currentValue)
+    },
     async getTableList(projectId) {
       const { data } = await SfProjectExtendService.getTableByProjectId(projectId)
       this.tableList = data
-      this.setDefault(data)
+      // this.setDefault(data)
+    },
+    getCurrentNode(value){
+      return this.tableList.find(item=>item.name == value)
     },
     onChange(value) {
       this.$emit('onChange', value)
@@ -70,7 +77,7 @@ export default {
 .select-db-table {
   width: fit-content;
   padding: 5px;
-  border: 1px dashed #aaa;
+  border: 1px dashed #999;
   display: flex;
   align-items: center;
 

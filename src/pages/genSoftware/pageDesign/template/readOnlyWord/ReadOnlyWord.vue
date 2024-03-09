@@ -1,3 +1,3 @@
 <template>
-    <div>readOnlyWord-只读Word</div>
+    <div class="common-page">readOnlyWord-只读Word</div>
 </template>
