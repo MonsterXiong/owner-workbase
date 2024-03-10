@@ -1,14 +1,16 @@
 <template>
-  <div class="common-page general-table">
+  <div class="common-page">
     <SplitLayout :projectId="projectId" title="合并表格配置">
-      <SelectDbTable :projectId="projectId" @onChange="onCurrentTableName" ref="selectDbTableRef"></SelectDbTable>
-      <SetDbFieldTable :projectId="projectId" :tableName="tableName" :sourceList="sourceList" :isRemote="isRemote" ref="setDbFieldTableRef"></SetDbFieldTable>
+      <div class="merge-table">
+        <SelectDbTable :projectId="projectId" @onChange="onCurrentTableName" ref="selectDbTableRef"></SelectDbTable>
+        <SelectFieldTableForMergeTable :projectId="projectId" :tableName="tableName" :sourceList="sourceList" :isRemote="isRemote" ref="setDbFieldTableRef"></SelectFieldTableForMergeTable>
+      </div>
     </SplitLayout>
   </div>
 </template>
 <script>
 import SelectDbTable from "@/bizComponents/selectDbTable/SelectDbTable.vue";
-import SetDbFieldTable from "@/bizComponents/setDbFieldTable/SetDbFieldTable.vue";
+import SelectFieldTableForMergeTable from "./components/SelectFieldTableForMergeTable.vue";
 import SplitLayout from '@/components/splitLayout/SplitLayout.vue';
 
 export default {
@@ -18,7 +20,7 @@ export default {
   },
   components: {
     SelectDbTable,
-    SetDbFieldTable,
+    SelectFieldTableForMergeTable,
     SplitLayout,
   },
   data() {
@@ -50,6 +52,7 @@ export default {
   methods: {
     onCurrentTableName(tableName) {
       this.isRemote = true
+      this.sourceList = []
       this.tableName = tableName
     },
     getInfo(){
@@ -60,7 +63,7 @@ export default {
           tableName: tableInfo.comment || '',
           attrs: [...fieldInfo]
       }
-      return null
+      return templateParam
     }
   },
 
@@ -68,7 +71,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.general-table {
+.merge-table {
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px

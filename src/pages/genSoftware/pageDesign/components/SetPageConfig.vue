@@ -77,6 +77,7 @@ export default {
       })
       this.$message.success('保存成功')
       this.getMenuDetail()
+
     },
     refresh(menuId) {
       this.getMenuDetail(menuId)

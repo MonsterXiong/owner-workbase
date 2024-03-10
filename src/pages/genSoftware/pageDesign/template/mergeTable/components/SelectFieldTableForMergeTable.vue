@@ -41,6 +41,11 @@
           <el-switch v-model="row.isRequired" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
+      <el-table-column label="是否合并" align="center" >
+        <template slot-scope="{ row }">
+          <el-switch v-model="row.isMerge" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="onConfig(scope.$index, scope.row)">配置</el-button>
@@ -64,7 +69,6 @@ export default {
   },
   data() {
     return {
-      sourceTableData: [],
       tableData: [],
       displayTypeOption:[{
         value:'input',
@@ -130,7 +134,6 @@ export default {
     sourceList(newValue) {
       if (newValue?.length) {
         this.tableData = newValue
-        // this.initTemplate(newValue)
       }
     },
   },
@@ -150,6 +153,7 @@ export default {
           isRequired: !isAllowNull,
           isHidden: isPrimaryKey || !isIncludeName,
           isPrimaryKey,
+          isMerge:false,
           param: {},
           configParam: {}
         }
@@ -158,11 +162,6 @@ export default {
     async getFieldList(tableName) {
       const { data } = await SfProjectExtendService.getFieldByProjectId(this.projectId, tableName)
       this.fieldList = data
-      // if(this.sourceList?.length){
-      //     return
-      // }else{
-      //   this.initTemplate(data)
-      // }
     },
     onChangePrimaryKey(row, value) {
       if (!value) {

@@ -46,6 +46,7 @@ export default {
   methods: {
     onCurrentTableName(tableName) {
       this.isRemote = true
+      this.sourceList = []
       this.tableName = tableName
     },
     getInfo(){
