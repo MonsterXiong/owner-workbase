@@ -131,7 +131,7 @@ export default {
       this.tableData = data.map(item => {
         const { Field, Comment, Key, Null } = item
         const isPrimaryKey = Key == 'PRI'
-        const isIncludeName = Field.endsWith('_name')
+        const isIncludeName = Field.endsWith('name')
         const isAllowNull = Null == 'YES'
         return {
           prop: Field,

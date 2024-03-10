@@ -2,29 +2,22 @@
   <div class="common-page">
     <SplitLayout :projectId="projectId" leftTitle="横向" title="纵向" rightTitle="关联">
       <template #left>
-        <div style="display: flex;flex-direction: column;gap:10px">
-          <SelectDbField title="唯一标识" :projectId="projectId" :tableName="tableName" @onChange="onChangeField"></SelectDbField>
-          <SelectDbField title="父级标识" :projectId="projectId" :tableName="tableName" @onChange="onChangeField"></SelectDbField>
-          <SelectDbField title="展示名称" :projectId="projectId" :tableName="tableName" @onChange="onChangeField"></SelectDbField>
-        </div>
+        <SelectSingleDb :emptyRuleField="['parentCode']" :formData.sync="horizontalFormData"
+          ref="selectSingDbHorizontalRef" :dataList="tableList" type="tree" :projectId="projectId"></SelectSingleDb>
       </template>
-      <div style="display: flex;flex-direction: column;gap:10px">
-          <SelectDbField title="唯一标识" :projectId="projectId" :tableName="tableName" @onChange="onChangeField"></SelectDbField>
-          <SelectDbField title="父级标识" :projectId="projectId" :tableName="tableName" @onChange="onChangeField"></SelectDbField>
-          <SelectDbField title="展示名称" :projectId="projectId" :tableName="tableName" @onChange="onChangeField"></SelectDbField>
-        </div>
+      <SelectSingleDb :emptyRuleField="['parentCode']" :formData.sync="verticalFormData" ref="selectSingDbVerticalRef"
+        :dataList="tableList" type="tree" :projectId="projectId"></SelectSingleDb>
       <template #right>
-        <div style="display: flex;flex-direction: column;gap:10px">
-          <SelectDbField title="唯一标识" :projectId="projectId" :tableName="tableName" @onChange="onChangeField"></SelectDbField>
-          <SelectDbField title="关系字段" :projectId="projectId" :tableName="tableName" @onChange="onChangeField"></SelectDbField>
-        </div>
+        <SelectSingleDb :emptyRuleField="['relCode']" :formData.sync="relFormData" ref="selectSingDbRelRef"
+          :dataList="tableList" type="matrix" :projectId="projectId"></SelectSingleDb>
       </template>
     </SplitLayout>
   </div>
 </template>
 <script>
-import SplitLayout from '@/bizComponents/splitLayout/SplitLayout.vue';
-import SelectDbField from '@/bizComponents/selectDbField/SelectDbField.vue';
+import { SfProjectExtendService } from "@/services";
+import SplitLayout from '@/components/splitLayout/SplitLayout.vue';
+import SelectSingleDb from '@/bizComponents/selectSingleDb/SelectSingleDb.vue';
 export default {
   props: {
     projectId: {},
@@ -32,14 +25,67 @@ export default {
   },
   components: {
     SplitLayout,
-    SelectDbField
+    SelectSingleDb
+  },
+  watch: {
+    menuDetailInfo: {
+      handler(newValue, oldValue) {
+        const menuParam = JSON.parse(newValue.menuParam)
+        const { templateParam } = menuParam
+        if (templateParam) {
+          const { horizontal, rel, vertical } = templateParam
+          if (horizontal) {
+            this.horizontalFormData = horizontal
+          }
+          if (vertical) {
+            this.verticalFormData = vertical
+          }
+          if (rel) {
+            this.relFormData = rel
+          }
+        }
+
+      },
+      immediate: true
+    }
+  },
+  data() {
+    return {
+      tableList: [],
+      horizontalFormData: {
+        tableName: '',
+        fieldList: {}
+      },
+      verticalFormData: {
+        tableName: '',
+        fieldList: {}
+      },
+      relFormData: {
+        tableName: '',
+        fieldList: {}
+      },
+    }
+  },
+  mounted() {
+    this.getTableList()
   },
   methods: {
-    onChangeField() {
-
+    async getTableList() {
+      const { data } = await SfProjectExtendService.getTableByProjectId(this.projectId)
+      this.tableList = data
+    },
+    getInfo() {
+      const horizontal = this.$refs.selectSingDbHorizontalRef.getData() || {}
+      const vertical = this.$refs.selectSingDbVerticalRef.getData() || {}
+      const rel = this.$refs.selectSingDbRelRef.getData() || {}
+      const templateParam = {
+        horizontal,
+        vertical,
+        rel
+      }
+      return templateParam
     }
   },
 }
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>
