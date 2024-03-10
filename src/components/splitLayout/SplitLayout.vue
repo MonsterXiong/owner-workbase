@@ -1,21 +1,21 @@
 <template>
   <div class="common-page split-layout" :style="{ flexDirection: splitType == 'horizontal' ? 'column' : 'row' }">
     <template v-if="$slots.left">
-      <div class="wrapper">
+      <div class="wrapper" :style="{flex:leftPanelSize}">
         <div class="header">{{ leftTitle || '左侧' }}</div>
         <div class="main-content">
             <slot name="left"></slot>
         </div>
       </div>
     </template>
-    <div class="wrapper">
+    <div class="wrapper" :style="{flex:panelSize}">
       <div class="header">{{ title || '中间' }}</div>
       <div class="main-content">
           <slot></slot>
       </div>
     </div>
     <template v-if="$slots.right">
-      <div class="wrapper">
+      <div class="wrapper" :style="{flex:rightPanelSize}">
         <div class="header">{{ rightTitle || '右侧' }}</div>
         <div class="main-content">
             <slot name="right"></slot>
@@ -31,6 +31,18 @@ export default {
     splitType: {
       type: String,
       default: 'vertical'
+    },
+    leftPanelSize:{
+      type:Number,
+      default:1
+    },
+    panelSize:{
+      type:Number,
+      default:1
+    },
+    rightPanelSize:{
+      type:Number,
+      default:1
     },
     title: {},
     leftTitle: {},

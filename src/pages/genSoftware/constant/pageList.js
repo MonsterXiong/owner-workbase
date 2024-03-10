@@ -122,5 +122,15 @@ export const PAGE_LIST = [
     value: PAGE_TYPE.CRUD_TABLE,
     label: 'Crud表格',
   },
+	{
+    category: CATEGORY_TYPE.OTHER,
+    value: PAGE_TYPE.BATTLE_ACTIVITY_DESIGN,
+    label: '作战活动设计（新一代）',
+  },
+	{
+    category: CATEGORY_TYPE.COMPOSE,
+    value: PAGE_TYPE.LEFT_LIST_CENTER_GENERAL_GRAPH_RIGHT_FORM,
+    label: '左列表中普通绘图右表单',
+  },
 	/* Software Gen Code Placeholder */
 ]

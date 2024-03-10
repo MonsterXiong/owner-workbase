@@ -63,6 +63,9 @@ export default {
   methods: {
     async onSave(){
       const templateParam = this.$refs.dynamicCompRef.getInfo()
+      if(!templateParam){
+        return this.$message.warning('请填写所需数据')
+      }
       const pageConfigInfo = {
         ...this.menuParam,
         templateParam
@@ -74,7 +77,6 @@ export default {
       })
       this.$message.success('保存成功')
       this.getMenuDetail()
-
     },
     refresh(menuId) {
       this.getMenuDetail(menuId)

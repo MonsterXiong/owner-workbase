@@ -1,13 +1,13 @@
 <template>
   <div class="common-page">
     <el-table :data="tableData" style="width: 100%" height="100%">
-      <el-table-column label="名称" prop="label" width="160"></el-table-column>
-      <el-table-column label="属性" width="160">
+      <el-table-column label="名称" prop="label" ></el-table-column>
+      <el-table-column label="属性" >
         <template slot-scope="{row}">
           <el-tag size="medium">{{ row.prop }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="类型" align="center" width="160">
+      <el-table-column label="类型" align="center" >
         <template slot-scope="{row}">
           <el-select v-model="row.displayType" placeholder="请选择类型">
             <el-option v-for="item in displayTypeOption" :key="item.value" :label="item.label" :value="item.value">
@@ -15,28 +15,28 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="是否主键" align="center" width="160">
+      <el-table-column label="是否主键" align="center" >
         <template slot-scope="{ row }">
           <el-switch v-model="row.isPrimaryKey" active-color="#13ce66" inactive-color="#ff4949"
             @change="onChangePrimaryKey(row, $event)"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="是否隐藏" align="center" width="160">
+      <el-table-column label="是否隐藏" align="center" >
         <template slot-scope="{ row }">
           <el-switch v-model="row.isHidden" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="搜索项" align="center" width="160">
+      <el-table-column label="搜索项" align="center" >
         <template slot-scope="{ row }">
           <el-switch v-model="row.isQuery" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="表单项" align="center" width="160">
+      <el-table-column label="表单项" align="center" >
         <template slot-scope="{ row }">
           <el-switch v-model="row.isForm" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="是否必填" align="center" width="160">
+      <el-table-column label="是否必填" align="center" >
         <template slot-scope="{ row }">
           <el-switch v-model="row.isRequired" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
@@ -56,7 +56,11 @@ export default {
   props: {
     projectId: {},
     tableName: {},
-    isRemote: {}
+    isRemote: {
+      type:Boolean,
+      default:true
+    },
+    sourceList:{}
   },
   data() {
     return {
@@ -121,17 +125,16 @@ export default {
     },
     sourceList(newValue) {
       if (newValue?.length) {
-        this.tableData = newValue
+        this.initTemplate(newValue)
       }
     },
   },
   methods: {
-    async getFieldList(tableName) {
-      const { data } = await SfProjectExtendService.getFieldByProjectId(this.projectId, tableName)
-      this.tableData = data.map(item => {
+    initTemplate(data){
+      this.tableData= data.map(item => {
         const { Field, Comment, Key, Null } = item
         const isPrimaryKey = Key == 'PRI'
-        const isIncludeName = Field.endsWith('name')
+        const isIncludeName = Field?.endsWith('name')
         const isAllowNull = Null == 'YES'
         return {
           prop: Field,
@@ -146,6 +149,10 @@ export default {
           configParam: {}
         }
       })
+    },
+    async getFieldList(tableName) {
+      const { data } = await SfProjectExtendService.getFieldByProjectId(this.projectId, tableName)
+      this.initTemplate(data)
     },
     onChangePrimaryKey(row, value) {
       if (!value) {

@@ -39,7 +39,7 @@ export default {
       if (newValue?.length) {
         this.currentValue = ''
         this.fieldList = newValue
-        this.setDefault(newValue)
+        // this.setDefault(newValue)
       }
     },
   },

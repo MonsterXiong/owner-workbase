@@ -55,7 +55,7 @@ export default {
           tableCode: tableInfo.name,
           tableName: tableInfo.comment || '',
           attrs: [...fieldInfo]
-        }
+      }
       return templateParam
     }
   },

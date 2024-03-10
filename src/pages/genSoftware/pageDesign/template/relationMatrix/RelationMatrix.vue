@@ -75,9 +75,12 @@ export default {
       this.tableList = data
     },
     getInfo() {
-      const horizontal = this.$refs.selectSingDbHorizontalRef.getData() || {}
-      const vertical = this.$refs.selectSingDbVerticalRef.getData() || {}
-      const rel = this.$refs.selectSingDbRelRef.getData() || {}
+      const horizontal = this.$refs.selectSingDbHorizontalRef.getData()
+      const vertical = this.$refs.selectSingDbVerticalRef.getData()
+      const rel = this.$refs.selectSingDbRelRef.getData()
+      if(!horizontal || !vertical || !rel){
+        return null
+      }
       const templateParam = {
         horizontal,
         vertical,

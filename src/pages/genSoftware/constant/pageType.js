@@ -23,5 +23,7 @@ export const PAGE_TYPE = {
 	READ_ONLY_WORD: 'readOnlyWord',
 	WEIGHT_MATRIX: 'weightMatrix',
 	CRUD_TABLE: 'crudTable',
+	BATTLE_ACTIVITY_DESIGN: 'battleActivityDesign',
+	LEFT_LIST_CENTER_GENERAL_GRAPH_RIGHT_FORM: 'leftListCenterGeneralGraphRightForm',
 	/* Software Gen Code Placeholder */
 }

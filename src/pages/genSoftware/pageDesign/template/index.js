@@ -23,6 +23,8 @@ import LeftListRightRelationMatrix from './leftListRightRelationMatrix/LeftListR
 import ReadOnlyWord from './readOnlyWord/ReadOnlyWord.vue'
 import WeightMatrix from './weightMatrix/WeightMatrix.vue'
 import CrudTable from './crudTable/CrudTable.vue'
+import BattleActivityDesign from './battleActivityDesign/BattleActivityDesign.vue'
+import LeftListCenterGeneralGraphRightForm from './leftListCenterGeneralGraphRightForm/LeftListCenterGeneralGraphRightForm.vue'
 /* Software Gen Code Require Placeholder */
 
 // 可以使用自动导入隐射出一个动态组件MAP
@@ -52,5 +54,7 @@ export const COMPONENT_MAP = {
 	[PAGE_TYPE.READ_ONLY_WORD]: ReadOnlyWord,
 	[PAGE_TYPE.WEIGHT_MATRIX]: WeightMatrix,
 	[PAGE_TYPE.CRUD_TABLE]: CrudTable,
+	[PAGE_TYPE.BATTLE_ACTIVITY_DESIGN]: BattleActivityDesign,
+	[PAGE_TYPE.LEFT_LIST_CENTER_GENERAL_GRAPH_RIGHT_FORM]: LeftListCenterGeneralGraphRightForm,
 	/* Software Gen Code Placeholder */
 }
