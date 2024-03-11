@@ -20,6 +20,7 @@
         <el-button size="mini" @click="onAddComponentTemplate">添加页面模板</el-button>
         <el-button size="mini" @click="onDownloadServiceCode">下载当前项目的API</el-button>
         <el-button size="mini" @click="onDownloadEnumCode">下载当前项目的枚举</el-button>
+        <el-button size="mini" @click="onSyncSfProject">同步数据</el-button>
       </div>
       <div class="bottom">
         <SetPageConfig :projectId="projectId" :currentActivePage="currentActivePage" ref="setPageConfigRef"></SetPageConfig>
@@ -41,7 +42,9 @@ import ProjectDialog from '../project/components/ProjectDialog.vue'
 import GenProjectSelect from '@/bizComponents/genProjectSelect/GenProjectSelect'
 import GenMenuTree from '@/bizComponents/genMenuTree/GenMenuTree'
 import SetPageConfig from './components/SetPageConfig.vue'
-import { SfMenuDetailService, GenExtendService } from '@/services'
+import { SfMenuDetailService,SfProjectExtendService, GenExtendService } from '@/services'
+import { getGenerateJson, getProjectList } from '@/services/otherSystem.js'
+import {jsonData} from './mockData'
 export default {
   data() {
     return {
@@ -61,6 +64,26 @@ export default {
   },
   components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, ProjectDialog },
   methods: {
+    async onSyncSfProject(){
+      // TODO:对接 =>一个弹窗，选择项目，直接同步生成刷新
+      const projectId = '1111'
+      // const jsonData = await this.getGenerateJson(projectId)
+      if(jsonData){
+        await SfProjectExtendService.syncProjectToSf(projectId,jsonData)
+        this.$message.success('操作成功')
+      }
+      // 根据projectId查询JSON
+
+      this.$refs.genProjectSelectRef.refresh()
+      this.$refs.genProjectSelectRef.setCurrentKey(projectId)
+    },
+    async getGenerateJson(projectId) {
+      if (!projectId) {
+        this.$message.warning('请先选择项目')
+      }
+      const { data } = await getGenerateJson(projectId)
+      return data
+    },
     async onDownloadEnumCode(){
       const file = await GenExtendService.genSfEnumByProjectId(this.projectId)
       this.downloadFile(file)

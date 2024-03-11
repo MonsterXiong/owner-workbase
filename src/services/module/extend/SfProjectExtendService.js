@@ -10,4 +10,7 @@ export default class SfProjectExtendService {
   static async getFieldByProjectId(projectId,tableName) {
     return service.postQuery(`/sfProjectExtend/getFieldByProjectId`, {projectId,tableName})
   }
+  static async syncProjectToSf(projectId,jsonData) {
+    return service.post(`/sfProjectExtend/syncProjectToSf?projectId=${projectId}`, jsonData)
+  }
 }
