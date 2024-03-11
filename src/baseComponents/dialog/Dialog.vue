@@ -13,6 +13,7 @@ import { attrsListenersHack } from './mixins'
 
 export default {
   mixins: [attrsListenersHack],
+  name:'BaseDialog',
   data() {
     return {
       defaultOptions: Object.freeze({

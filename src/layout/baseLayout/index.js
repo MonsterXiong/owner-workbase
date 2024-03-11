@@ -113,7 +113,7 @@ const menuData = [
     eventParams: routesConstant.GEN_PROJECT.path,
   },
   // ...testMenuData,
-  // ...toolMenuData,
+  ...toolMenuData,
   ...genMenuData,
 ]
 

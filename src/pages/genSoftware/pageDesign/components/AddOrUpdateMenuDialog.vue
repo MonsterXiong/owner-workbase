@@ -8,15 +8,15 @@
             <el-radio label="module">模块</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="所属菜单" prop="parentId">
-          <el-select v-model="formData.parentId" filterable clearable placeholder="请选择所属菜单">
+        <el-form-item label="所属上级" prop="parentId">
+          <el-select v-model="formData.parentId" filterable clearable placeholder="请选择所属上级">
             <el-option v-for="item in menuList" :key="item.menuId" :label="item.menuName" :value="item.menuId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="名称" prop="pageName">
+        <el-form-item label="名称" prop="menuName">
           <el-input v-model="formData.menuName"></el-input>
         </el-form-item>
-        <el-form-item label="标识" prop="code">
+        <el-form-item label="标识" prop="menuCode">
           <el-input v-model="formData.menuCode"></el-input>
         </el-form-item>
         <el-form-item label="序号" prop="sort">
@@ -55,6 +55,7 @@ export default {
       formRules: {
         menuName: [{ required: true, message: '请输入名称', trigger: 'blur' }],
         menuType: [{ required: true, message: '请选择类别', trigger: 'change' }],
+        menuCode: [{ required: true, message: '请输入标识', trigger: 'blur' }],
       },
     }
   },

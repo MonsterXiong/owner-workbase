@@ -87,7 +87,7 @@ export default {
     },
     async getMenuDetail(menuId) {
       const queryCondition = QueryConditionBuilder.getInstanceNoPage()
-      queryCondition.buildEqualQuery('bind_menu', menuId ? menuId : this.currentActivePage.menuId)
+      queryCondition.buildEqualQuery('bindMenu', menuId ? menuId : this.currentActivePage.menuId)
       const { data } = await SfMenuDetailService.querySfMenuDetail(queryCondition)
       if (data?.length) {
         this.currentMenuDetail = data[0]

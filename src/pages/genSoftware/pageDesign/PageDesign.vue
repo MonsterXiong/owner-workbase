@@ -18,15 +18,17 @@
         </template>
         <el-button size="mini" style="margin-left: auto" @click="onDownloadCompleteCode">下载完整项目代码</el-button>
         <el-button size="mini" @click="onAddComponentTemplate">添加页面模板</el-button>
+        <el-button size="mini" @click="onDownloadServiceCode">下载当前项目的API</el-button>
+        <el-button size="mini" @click="onDownloadEnumCode">下载当前项目的枚举</el-button>
       </div>
       <div class="bottom">
         <SetPageConfig :projectId="projectId" :currentActivePage="currentActivePage" ref="setPageConfigRef"></SetPageConfig>
       </div>
     </div>
     <PageDetailDialog @onClick="onChangeMenuType" ref="pageDetailDialogRef" />
-    <AddComponentTemplateDialog @onSubmit="onAddComponentTemplate" ref="addComponentTemplateDialogRef" />
+    <AddComponentTemplateDialog ref="addComponentTemplateDialogRef" />
     <AddOrUpdateMenuDialog :projectId="projectId" @refresh="onRefreshMenuList" ref="AddOrUpdateMenuDialogRef" />
-    <AddOrUpdateProjectDialog @refresh="onRefreshProjectList" ref="AddOrUpdateProjectDialogRef" />
+    <ProjectDialog @submit="onSubmit" ref="projectDialogRef" />
   </div>
 </template>
 
@@ -35,7 +37,7 @@ import PageDetailDialog from './components/PageDetailDialog.vue'
 import { PAGE_TYPE } from '../constant/pageType'
 import AddComponentTemplateDialog from './components/AddComponentTemplateDialog.vue'
 import AddOrUpdateMenuDialog from './components/AddOrUpdateMenuDialog.vue'
-import AddOrUpdateProjectDialog from '../project/components/AddOrUpdateProjectDialog.vue'
+import ProjectDialog from '../project/components/ProjectDialog.vue'
 import GenProjectSelect from '@/bizComponents/genProjectSelect/GenProjectSelect'
 import GenMenuTree from '@/bizComponents/genMenuTree/GenMenuTree'
 import SetPageConfig from './components/SetPageConfig.vue'
@@ -57,8 +59,16 @@ export default {
       return this.currentActivePage?.menuType == 'page'
     },
   },
-  components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, AddOrUpdateProjectDialog },
+  components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, ProjectDialog },
   methods: {
+    async onDownloadEnumCode(){
+      const file = await GenExtendService.genSfEnumByProjectId(this.projectId)
+      this.downloadFile(file)
+    },
+    async onDownloadServiceCode() {
+      const file = await GenExtendService.genSfServiceByProjectId(this.projectId)
+      this.downloadFile(file)
+    },
     downloadFile(file) {
       const href = URL.createObjectURL(file)
       const box = document.createElement('a')
@@ -82,9 +92,15 @@ export default {
       const file = await GenExtendService.genSfProjectByProjectId(this.projectId)
       this.downloadFile(file)
     },
-    onRefreshProjectList(data) {
-      this.$refs.genProjectSelectRef.refresh()
-      this.$refs.genProjectSelectRef.setCurrentKey(data.projectId)
+    async onSubmit(formData) {
+      try {
+        const {data} = await this.onSaveAPI(formData)
+        this.$refs.genProjectSelectRef.refresh()
+        this.$refs.genProjectSelectRef.setCurrentKey(data.projectId)
+        this.$message.success('操作成功')
+      } catch (error) {
+        this.$message.error('操作失败，请联系管理员或者重试')
+      }
     },
     onCurrentMenu(menuData) {
       this.currentActivePage = menuData
@@ -93,7 +109,7 @@ export default {
       this.projectId = projectId
     },
     onAddProject() {
-      this.$refs.AddOrUpdateProjectDialogRef.show()
+      this.$refs.projectDialogRef.show()
     },
     async onRefreshMenuList(menuData) {
       this.$refs.genMenuTreeRef.refresh()
@@ -111,7 +127,7 @@ export default {
       const param = {
         categoryType: categoryType ? categoryType : 'empty',
         type: menuType ? menuType : 'empty',
-        templateParam:{}
+        templateParam: {},
       }
       // 其他默认参数需要设置
       const menuParam = JSON.stringify(param)

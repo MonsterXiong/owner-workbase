@@ -1,108 +1,85 @@
 <template>
-  <div class="common-page project-table">
-    <div class="table-wrapper">
-      <el-table :data="tableData" height="100%" @selection-change="onSelectionChange">
-        <el-table-column type="selection" width="50" align="center"></el-table-column>
-        <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-        <el-table-column prop="projectName" label="项目名称" align="center">
-          <template slot-scope="scope">
-            <el-tag size="medium">{{ scope.row.projectName }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="projectCode" label="项目标识" align="center"></el-table-column>
-        <el-table-column prop="shortName" label="简称" align="center"></el-table-column>
-        <el-table-column prop="remark" label="备注" align="center"></el-table-column>
-        <el-table-column prop="descript" label="描述" align="center"></el-table-column>
-        <el-table-column label="操作" align="center" width="220">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="onEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="success" @click="onConfig(scope.row)">配置</el-button>
-            <el-button size="mini" type="danger" @click="onDelete(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="pagination-wrapper">
+  <div class="common-page" ref="tableRef">
+    <el-table :data="tableData" :height="tableHeight" size="mini" border style="width: 100%" v-bind="$attrs" v-on="$listeners">
+      <el-table-column type="selection" align="center" label="序号" width="80"> </el-table-column>
+      <el-table-column type="index" label="序号" width="60px" align="center"> </el-table-column>
+      <el-table-column prop="projectCode" align="center" label="项目编码"></el-table-column>
+      <el-table-column prop="projectName" align="center" label="项目名称"></el-table-column>
+      <el-table-column prop="shortName" align="center" label="项目简称"></el-table-column>
+      <el-table-column prop="remark" align="center" label="备注"></el-table-column>
+      <el-table-column prop="projectDescription" align="center" label="项目描述"></el-table-column>
+      <el-table-column prop="systemName" align="center" label="系统名称"></el-table-column>
+      <el-table-column prop="systemCode" align="center" label="系统标识"></el-table-column>
+      <el-table-column prop="sort" align="center" label="排序"></el-table-column>
+      <el-table-column label="操作" width="260">
+        <template slot-scope="{ row }">
+          <el-button plain type="success"  size="mini" @click="onConfig(row)">配置</el-button>
+          <el-button plain type="primary" icon="el-icon-edit" size="mini" @click="onEdit(row)">编辑</el-button>
+          <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="onDelete(row)">刪除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="pagination-wrapper" ref="paginationRef">
       <el-pagination
-        @size-change="onSizeChange"
-        @current-change="onCurrentChange"
-        :current-page="pageInfo.pageNumber"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageInfo.pageSize"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageInfo.page"
+        :page-sizes="[10, 20, 50, 100, 200]"
+        :page-size="pageInfo.rows"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
-      ></el-pagination>
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'ProjectTable',
   props: {
     tableData: {},
     total: {},
-    pageInfo: {
-      type: Object,
-      default: () => {
-        return {
-          pageNumber: 1,
-          pageSize: 10,
-        }
-      },
-    },
+    pageInfo: {},
   },
   data() {
     return {
-      multipleSelection: [],
+      tableHeight: '500px',
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.setHeight()
+    })
+  },
   methods: {
-    onEdit(row) {
-      this.$emit('onEdit', row)
+    setHeight() {
+      this.tableHeight = this.$refs.tableRef.offsetHeight - this.$refs.paginationRef.offsetHeight + 'px'
     },
     onConfig(row) {
       this.$emit('onConfig', row)
     },
+    onEdit(row) {
+      this.$emit('onEdit', row)
+    },
     onDelete(row) {
       this.$emit('onDelete', row)
     },
-    onChangePageInfo(pageInfo) {
-      this.$emit('update:pageInfo', pageInfo)
+    handleSizeChange(rows) {
+      this.pageInfo.rows = rows
     },
-    onSizeChange(val) {
-      this.onChangePageInfo({ ...this.pageInfo, pageSize: val })
-    },
-    onCurrentChange(val) {
-      this.onChangePageInfo({ ...this.pageInfo, pageNumber: val })
-    },
-    onSelectionChange(val) {
-      this.multipleSelection = val
+    handleCurrentChange(page) {
+      this.pageInfo.page = page
     },
   },
 }
 </script>
 
 <style lang="less" scoped>
-.project-table {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  ::v-deep {
-    .el-button + .el-button {
-      margin-left: 10px !important;
-    }
-  }
-  .table-wrapper {
-    height: calc(100% - 32px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-    border: 1px dashed #356191;
-    border-top: none;
-  }
-
-  .pagination-wrapper {
-    padding: 0 10px;
-    text-align: end;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-  }
+.pagination-wrapper {
+  text-align: right;
+}
+.el-button + .el-button {
+  margin-left: 10px !important;
 }
 </style>
