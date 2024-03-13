@@ -1,0 +1,206 @@
+{
+    "categoryType": "table",
+    "type": "crudTable",
+    "templateParam": {
+        "tableCode": "xyd_act",
+        "tableName": "作战活动",
+        "attrs": [
+            {
+                "prop": "act_id",
+                "label": "活动ID",
+                "displayType": "input",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": true,
+                "isHidden": false,
+                "isPrimaryKey": true,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "act_name",
+                "label": "活动名称",
+                "displayType": "select",
+                "isQuery": true,
+                "isForm": true,
+                "isRequired": true,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {
+                    "type": "enum",
+                    "hasMultiple": true,
+                    "hasFilterable": true,
+                    "hasClearable": true,
+                    "param": {
+                        "enumCategory": "abiIndex_type"
+                    },
+                    "data": []
+                }
+            },
+            {
+                "prop": "act_code",
+                "label": "活动标识",
+                "displayType": "select",
+                "isQuery": true,
+                "isForm": true,
+                "isRequired": true,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {
+                    "type": "interface",
+                    "hasMultiple": false,
+                    "hasFilterable": false,
+                    "hasClearable": false,
+                    "param": {
+                        "tableName": "ability_index",
+                        "labelKey": "abi_name",
+                        "valueKey": "abi_id"
+                    },
+                    "data": []
+                }
+            },
+            {
+                "prop": "description",
+                "label": "描述",
+                "displayType": "select",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": true,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {
+                    "type": "mock",
+                    "hasMultiple": true,
+                    "hasFilterable": false,
+                    "hasClearable": true,
+                    "param": {},
+                    "data": [
+                        {
+                            "label": "张三",
+                            "value": "zs"
+                        },
+                        {
+                            "label": "李四",
+                            "value": "ls"
+                        },
+                        {
+                            "label": "王五",
+                            "value": "ww"
+                        }
+                    ]
+                }
+            },
+            {
+                "prop": "bind_unit",
+                "label": "所属单元",
+                "displayType": "datetime",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": true,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "bind_task",
+                "label": "所属任务",
+                "displayType": "date",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": true,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "bind_project",
+                "label": "所属项目",
+                "displayType": "time",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": true,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "sys_sort",
+                "label": "排序",
+                "displayType": "checkbox",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": false,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "sys_is_del",
+                "label": "是否已删除",
+                "displayType": "switch",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": false,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "sys_creator",
+                "label": "创建人",
+                "displayType": "colorPicker",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": false,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "sys_create_time",
+                "label": "创建时间",
+                "displayType": "rate",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": false,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "sys_updater",
+                "label": "修改人",
+                "displayType": "slider",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": false,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            },
+            {
+                "prop": "sys_update_time",
+                "label": "修改时间",
+                "displayType": "image",
+                "isQuery": false,
+                "isForm": true,
+                "isRequired": false,
+                "isHidden": false,
+                "isPrimaryKey": false,
+                "param": {},
+                "configParam": {}
+            }
+        ]
+    }
+}

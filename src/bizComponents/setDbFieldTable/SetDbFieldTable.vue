@@ -9,7 +9,7 @@
       </el-table-column>
       <el-table-column label="类型" align="center" >
         <template slot-scope="{row}">
-          <el-select v-model="row.displayType" placeholder="请选择类型">
+          <el-select v-model="row.displayType" placeholder="请选择类型" @change="onChangeDisplayType($event,row)">
             <el-option v-for="item in displayTypeOption" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
@@ -18,7 +18,7 @@
       <el-table-column label="是否主键" align="center" >
         <template slot-scope="{ row }">
           <el-switch v-model="row.isPrimaryKey" active-color="#13ce66" inactive-color="#ff4949"
-            @change="onChangePrimaryKey(row, $event)"></el-switch>
+            @change="onChangePrimaryKey($event,row)"></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="是否隐藏" align="center" >
@@ -43,7 +43,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="onConfig(scope.$index, scope.row)">配置</el-button>
+          <el-button size="mini" @click="onConfig(scope.row)">配置</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,6 +52,8 @@
 
 <script>
 import { SfProjectExtendService } from "@/services";
+import { EMIT_EVENT_TYPE } from '@/common/constant/emitEventType'
+import { FIELD_DEFAULT_CONFIG } from './config'
 export default {
   props: {
     projectId: {},
@@ -76,8 +78,8 @@ export default {
         value:'select',
         label:'下拉框'
       },{
-        value:'multipleSelect',
-        label:'多选下拉框'
+        value:'treeSelect',
+        label:'树形下拉框'
       },{
         value:'textarea',
         label:'文本域'
@@ -150,6 +152,8 @@ export default {
           isRequired: !isAllowNull,
           isHidden: isPrimaryKey || !isIncludeName,
           isPrimaryKey,
+          //
+          placeholder:Comment,
           param: {},
           configParam: {}
         }
@@ -164,7 +168,27 @@ export default {
       //   this.initTemplate(data)
       // }
     },
-    onChangePrimaryKey(row, value) {
+    onChangeDisplayType(value,row){
+      console.log('value',value,row);
+      const fieldBaseConfig = FIELD_DEFAULT_CONFIG[value] || {}
+      let configParam = {}
+      if(value == 'select'){
+         configParam = {
+          ...fieldBaseConfig,
+          // mock enum interface
+          type:"mock",
+          param:{},
+          data:[{value:'monster',label:'大雄'}]
+          // 切换为enum
+          // param：{}
+        }
+      }
+      this.$set(row,'configParam',configParam)
+      console.log('row',row);
+
+
+    },
+    onChangePrimaryKey(value,row) {
       if (!value) {
         row.isPrimaryKey = true
         return this.$message.warning('必须存在唯一主键')
@@ -179,8 +203,8 @@ export default {
     getTableData() {
       return this.tableData
     },
-    onConfig(index, row) {
-      console.log(index, row);
+    onConfig(row) {
+      this.$emitter.emit(EMIT_EVENT_TYPE.OPEN_FIELD_CONFIG_DIALOG,{projectId:this.projectId,row})
     },
   }
 }
