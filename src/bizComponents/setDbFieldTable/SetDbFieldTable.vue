@@ -42,8 +42,8 @@
         </template>
       </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="onConfig(scope.row)">配置</el-button>
+        <template slot-scope="{ row }" v-if="row.displayType == 'select'">
+          <el-button size="mini" @click="onConfig(row)">配置</el-button>
         </template>
       </el-table-column>
     </el-table>

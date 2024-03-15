@@ -1,21 +1,15 @@
 <template>
   <div class="common-page">
-    <SplitLayout :projectId="projectId" title="卡片表格配置">
-      卡片表格配置
-    </SplitLayout>
+    CardTable
   </div>
 </template>
+
 <script>
-import SplitLayout from '@/bizComponents/splitLayout/SplitLayout.vue';
-export default {
-  props: {
-    projectId: {},
-    menuDetailInfo: {}
-  },
-  components: {
-    SplitLayout
-  },
-}
+  export default {
+
+  }
 </script>
+
 <style lang="less" scoped>
+
 </style>

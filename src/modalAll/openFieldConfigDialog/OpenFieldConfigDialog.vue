@@ -1,5 +1,5 @@
 <template>
-  <el-drawer :visible.sync="visible" direction="rtl" custom-class="demo-drawer" ref="drawer" :show-close="false" :withHeader="false">
+  <el-drawer :visible.sync="visible" direction="rtl" custom-class="demo-drawer" ref="drawer" @close="onClose" :show-close="false" :withHeader="false">
     <div class="demo-drawer__content">
       <el-form :model="formData" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="label" prop="label">
@@ -26,7 +26,7 @@
         </template>
         <!-- 接口类别 -->
         <template v-if="formData.configParam.type == 'interface'">
-          <SelectSingleDb isRemote :formData.sync="dbFormData" ref="selectSingDbRef"  type="list" :projectId="projectId"></SelectSingleDb>
+          <SelectSingleDb isRemote :formData.sync="dbFormData" ref="selectSingDbRef" type="list" :projectId="projectId"></SelectSingleDb>
         </template>
 
         <el-form-item label="是否默认值" prop="hasDefaultValue">
@@ -47,7 +47,7 @@
           <el-switch v-model="formData.configParam.hasClearable" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" style="margin-right: 10px">取 消</el-button>
+          <el-button size="mini" style="margin-right: 10px" @click="onClose">取 消</el-button>
           <el-button size="mini" type="primary" @click="onSubmit">确 定</el-button>
         </el-form-item>
       </el-form>
@@ -59,7 +59,7 @@
 import { EMIT_EVENT_TYPE } from '@/common/constant/emitEventType'
 import { SfEnumCategoryService } from '@/services'
 import QueryConditionBuilder from '@/utils/queryConditionBuilder'
-import SelectSingleDb from '@/bizComponents/selectSingleDb/SelectSingleDb.vue';
+import SelectSingleDb from '@/bizComponents/selectSingleDb/SelectSingleDb.vue'
 export default {
   components: {
     SelectSingleDb,
@@ -71,14 +71,14 @@ export default {
       dialogWidth: '700px',
       activeName: 'first',
       projectId: '',
-      dbFormData:{
-        tableName:'',
-        fieldList: {}
+      dbFormData: {
+        tableName: '',
+        fieldList: {},
       },
       formData: {
         configParam: {
           type: '',
-          param: '',
+          param: {},
           hasDefaultValue: false,
           defaultValue: '',
           hasMultiple: false,
@@ -89,7 +89,6 @@ export default {
     }
   },
   mounted() {
-
     this.$emitter.on(EMIT_EVENT_TYPE.OPEN_FIELD_CONFIG_DIALOG, this.show)
   },
   methods: {
@@ -100,19 +99,21 @@ export default {
       this.enumOption = data
     },
     onSubmit() {
-      if(this.formData.configParam.type == 'interface'){
+      if (this.formData.configParam.type == 'interface') {
         const dbData = this.$refs.selectSingDbRef.getData()
-        console.log('dbData',dbData);
+
+        console.log('dbData', dbData)
 
         const param = {
-          tableName:dbData.tableCode,
-          labelKey:dbData.fieldList.displayName,
-          valueKey:dbData.fieldList.uniqueCode,
+          tableName: dbData.tableCode,
+          labelKey: dbData.fieldList.displayName,
+          valueKey: dbData.fieldList.uniqueCode,
         }
-        this.$set(this.formData.configParam,'param',param)
+        // this.$set(this.formData.configParam, 'param', param)
         this.formData.configParam.param = param
+        this.row.configParam = {...this.formData.configParam}
+        this.row.label = this.formData.label
       }
-      console.log('xxxx', this.formData)
     },
     async onChangeType(value) {
       let param = {}
@@ -123,41 +124,58 @@ export default {
         await this.getEnumCategoryList()
       }
       if (value == 'interface ') {
-         param={
-          tableName:'',
-          valueKey:'',
-          labelKey:''
-         }
+        param = {
+          tableName: '',
+          valueKey: '',
+          labelKey: '',
+        }
       }
       if (value == 'mock') {
         //
-        this.formData.configParam.param={}
-
+        this.formData.configParam.param = {}
       }
-        this.formData.configParam.param = param
-
-      console.log('value', value, this.formData)
-    },
-    handleClick(tab, event) {
-      console.log(tab, event)
+      this.formData.configParam.param = param
     },
     async show(paramData) {
       if (paramData) {
         const { row, projectId } = paramData
         this.projectId = projectId
         await this.getEnumCategoryList()
+        console.log('row',row);
+
         if (row) {
-          this.formData = paramData.row
+          this.row = paramData.row
+          this.formData = {...row}
+          if (this.formData?.configParam.type == 'interface') {
+            const { param, data } = this.formData?.configParam
+            this.dbFormData = {
+              tableCode: param.tableName,
+              fieldList: {
+                uniqueCode: param.valueKey,
+                displayName: param.labelKey,
+              },
+            }
+          }
         }
       }
-
       this.visible = true
     },
-    onClose() {
-      this.visible = false
+    resetFormData() {
+      this.formData= {
+        configParam: {
+          type: 'mock',
+          param: {},
+          hasDefaultValue: false,
+          defaultValue: '',
+          hasMultiple: false,
+        },
+      }
     },
-    onCancel() {
+    onClose() {
+      console.log('xxxx-close');
+
       this.visible = false
+      this.resetFormData()
     },
   },
 }
