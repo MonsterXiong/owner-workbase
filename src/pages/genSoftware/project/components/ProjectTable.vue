@@ -11,9 +11,10 @@
       <el-table-column prop="systemName" align="center" label="系统名称"></el-table-column>
       <el-table-column prop="systemCode" align="center" label="系统标识"></el-table-column>
       <el-table-column prop="sort" align="center" label="排序"></el-table-column>
-      <el-table-column label="操作" width="260">
+      <el-table-column label="操作" width="380">
         <template slot-scope="{ row }">
-          <el-button plain type="success"  size="mini" @click="onConfig(row)">配置</el-button>
+          <el-button plain type="primary" size="mini" @click="onDbConfig(row)">数据库配置</el-button>
+          <el-button plain type="primary" size="mini" @click="onProjectConfig(row)">项目配置</el-button>
           <el-button plain type="primary" icon="el-icon-edit" size="mini" @click="onEdit(row)">编辑</el-button>
           <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="onDelete(row)">刪除</el-button>
         </template>
@@ -56,8 +57,11 @@ export default {
     setHeight() {
       this.tableHeight = this.$refs.tableRef.offsetHeight - this.$refs.paginationRef.offsetHeight + 'px'
     },
-    onConfig(row) {
-      this.$emit('onConfig', row)
+    onDbConfig(row) {
+      this.$emit('onDbConfig', row)
+    },
+    onProjectConfig(row) {
+      this.$emit('onProjectConfig', row)
     },
     onEdit(row) {
       this.$emit('onEdit', row)

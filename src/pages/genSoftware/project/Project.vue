@@ -9,25 +9,33 @@
       :total="total"
       @onEdit="onEdit"
       @onDelete="onDelete"
+      @onDbConfig="onDbConfig"
+      @onProjectConfig="onProjectConfig"
       @selection-change="onSelectionChange"
     ></ProjectTable>
     <ProjectDialog ref="projectDialogRef" @submit="onSubmit"></ProjectDialog>
+    <ProjectConfigDialog ref="projectConfigDialogRef" @submit="onProjectConfigSubmit"></ProjectConfigDialog>
+    <ProjectDbConfigDialog ref="projectDbConfigDialogRef" @submit="onProjectConfigSubmit"></ProjectDbConfigDialog>
   </TableLayout>
 </template>
 
 <script>
-import { SfProjectService } from '@/services'
+import { SfProjectService,SfProjectConfigService } from '@/services'
 import { SfProjectExtendService } from '@/services'
 import { QueryConditionBuilder } from '@/utils/queryConditionBuilder'
 import ProjectDialog from './components/ProjectDialog.vue'
 import ProjectTable from './components/ProjectTable.vue'
 import ProjectQuery from './components/ProjectQuery.vue'
+import ProjectConfigDialog from './components/ProjectConfigDialog.vue'
+import ProjectDbConfigDialog from './components/ProjectDbConfigDialog.vue'
 export default {
   name: 'Project',
   components: {
     ProjectTable,
     ProjectQuery,
     ProjectDialog,
+    ProjectConfigDialog,
+    ProjectDbConfigDialog
   },
   data() {
     return {
@@ -53,6 +61,10 @@ export default {
     },
   },
   methods: {
+    async onProjectConfigSubmit(formData){
+      await SfProjectConfigService.saveSfProjectConfig(formData)
+      this.$message.success('操作成功')
+    },
     init() {
       this.getTableData()
     },
@@ -79,6 +91,26 @@ export default {
     // 编辑
     onEdit(row) {
       this.$refs.projectDialogRef.show(row)
+    },
+    // 数据库配置
+    async onDbConfig(row){
+      const projectConfig = await this.getProjectConfigInfo(row)
+      this.$refs.projectDbConfigDialogRef.show(projectConfig)
+    },
+    // 项目配置
+    async onProjectConfig(row){
+      const projectConfig = await this.getProjectConfigInfo(row)
+      this.$refs.projectConfigDialogRef.show(projectConfig)
+    },
+    async getProjectConfigInfo(row){
+      const queryCondition = QueryConditionBuilder.getInstanceNoPage()
+      queryCondition.buildEqualQuery('bindProject',row.projectId)
+      const { data } = await SfProjectConfigService.querySfProjectConfig(queryCondition)
+      if(!data.length){
+        return this.$message.warning('当前项目暂时没有配置项')
+      }
+      return data[0]
+
     },
     // 删除
     async onDelete(row) {
@@ -135,9 +167,9 @@ export default {
           queryCondition.buildLikeQuery(key, this.queryForm[key])
         }
       })
-      const { data, totalCount } = await this.onQueryListAPI(queryCondition)
+      const { data } = await this.onQueryListAPI(queryCondition)
       this.tableData = data.data
-      this.total = totalCount
+      this.total = data.totalCount
     },
     async onSubmit(formData) {
       try {
