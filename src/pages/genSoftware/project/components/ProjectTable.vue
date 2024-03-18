@@ -11,12 +11,17 @@
       <el-table-column prop="systemName" align="center" label="系统名称"></el-table-column>
       <el-table-column prop="systemCode" align="center" label="系统标识"></el-table-column>
       <el-table-column prop="sort" align="center" label="排序"></el-table-column>
-      <el-table-column label="操作" width="380">
+      <el-table-column label="操作" align="center" width="320">
         <template slot-scope="{ row }">
-          <el-button plain type="primary" size="mini" @click="onDbConfig(row)">数据库配置</el-button>
-          <el-button plain type="primary" size="mini" @click="onProjectConfig(row)">项目配置</el-button>
-          <el-button plain type="primary" icon="el-icon-edit" size="mini" @click="onEdit(row)">编辑</el-button>
-          <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="onDelete(row)">刪除</el-button>
+          <el-button plain type="primary" icon="el-icon-view" circle title="打开项目" @click="onOpen(row)"></el-button>
+          <template v-if="row.isSync">
+            <el-button plain type="primary" icon="el-icon-position" circle title="同步更新" @click="onSyncUpdate(row)"></el-button>
+          </template>
+          <el-button plain type="primary" icon="el-icon-download" circle title="下载项目" @click="onDownload(row)"></el-button>
+          <el-button plain type="primary" icon="el-icon-coin" circle title="数据库配置" @click="onDbConfig(row)"></el-button>
+          <el-button plain type="primary" icon="el-icon-setting" circle title="项目配置"  @click="onProjectConfig(row)"></el-button>
+          <el-button plain type="primary" icon="el-icon-edit" circle title="编辑项目" @click="onEdit(row)"></el-button>
+          <el-button plain type="danger" icon="el-icon-delete" circle title="刪除项目" @click="onDelete(row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -56,6 +61,15 @@ export default {
   methods: {
     setHeight() {
       this.tableHeight = this.$refs.tableRef.offsetHeight - this.$refs.paginationRef.offsetHeight + 'px'
+    },
+    onOpen(row) {
+      this.$emit('onOpen', row)
+    },
+    onSyncUpdate(row) {
+      this.$emit('onSyncUpdate', row)
+    },
+    onDownload(row) {
+      this.$emit('onDownload', row)
     },
     onDbConfig(row) {
       this.$emit('onDbConfig', row)

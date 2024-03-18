@@ -10,7 +10,7 @@
             <div style="flex:1;font-size:16px;font-weight: bold;text-align: center;">{{currentComponentName}}</div>
             <el-button type="text" style="margin-left:auto" @click="onSave">保存</el-button>
           </div>
-          <div style="height:calc(100% - 45px);">
+          <div style="height:calc(100% - 35px);">
             <component :is="currentComponent" :projectId="projectId" :menuDetailInfo="currentMenuDetail"  ref="dynamicCompRef"></component>
           </div>
         </div>

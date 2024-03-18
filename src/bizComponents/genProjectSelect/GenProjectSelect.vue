@@ -1,17 +1,33 @@
 <template>
   <div class="gen-project-select">
     <el-select v-model="projectId" filterable placeholder="请选择项目" @change="onChangeProject">
-      <el-option v-for="item in projectList" :key="item.projectId" :label="item.projectName"
-        :value="item.projectId"></el-option>
+      <el-option v-for="item in projectList" :key="item.projectId" :label="item.projectName" :value="item.projectId"></el-option>
     </el-select>
-    <span class="add-icon" @click="onAdd"><i class="el-icon-plus"></i></span>
+    <template v-if="download">
+      <span class="add-icon" @click="onDownload" title="下载完整项目代码"><i class="el-icon-download"></i></span>
+    </template>
+    <template v-if="add">
+      <span class="add-icon" @click="onAdd"><i class="el-icon-plus"></i></span>
+    </template>
   </div>
 </template>
 
 <script>
-import { SfProjectService } from '@/services'
+import { SfProjectService, GenExtendService } from '@/services'
 import QueryConditionBuilder from '@/utils/queryConditionBuilder'
+import { downloadFile } from '@/utils/fileUtil'
+
 export default {
+  props: {
+    download: {
+      type: Boolean,
+      default: false,
+    },
+    add: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       projectId: '',
@@ -24,17 +40,21 @@ export default {
   watch: {
     projectId(newValue, oldValue) {
       this.onChangeProject(newValue)
-    }
+    },
   },
   methods: {
-    refresh(){
+    async onDownload() {
+      const file = await GenExtendService.genSfProjectByProjectId(this.projectId)
+      downloadFile(file)
+    },
+    refresh() {
       this.getProjectList()
     },
-    setCurrentKey(projectId){
+    setCurrentKey(projectId) {
       this.projectId = projectId
     },
-    onChangeProject(projetcId){
-      this.$emit('onChange',projetcId)
+    onChangeProject(projetcId) {
+      this.$emit('onChange', projetcId)
     },
     onAdd() {
       this.$emit('onAdd')
@@ -58,9 +78,9 @@ export default {
   cursor: pointer;
 }
 
-.gen-project-select{
+.gen-project-select {
   display: flex;
   padding: 0 5px;
-  width:100%
+  width: 100%;
 }
 </style>

@@ -12,6 +12,7 @@
         <el-button icon="el-icon-refresh" @click="onEvent('reset')">重置</el-button>
         <el-button type="success" icon="el-icon-circle-plus-outline" @click="onEvent('add')">新增</el-button>
         <el-button type="danger" icon="el-icon-delete" @click="onEvent('batchDelete')">批量删除</el-button>
+        <el-button size="mini" plain type="primary" @click="onEvent('onSync')">同步</el-button>
       </div>
     </el-form-item>
   </el-form>
@@ -26,9 +27,6 @@ export default {
   methods: {
     onEvent(type) {
       this.$emit('onEvent', type)
-    },
-    onReset() {
-      this.$emit('onReset')
     },
   },
 }

@@ -2,15 +2,15 @@
   <BaseDialog :title="dialogTitle" :visible="dialogVisible" :before-close="onDialogClose" :width="dialogWidth">
     <div class="common-page page-detail">
       <el-form ref="formRef" :model="formData" :rules="formRules" label-width="80px">
-          <el-form-item label="项目" prop="projectId">
-              <el-select v-model="formData.projectId" placeholder="请选择项目" clearable>
-                <el-option v-for="item in projectList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
-          </el-form-item>
+        <el-form-item label="项目" prop="projectId">
+          <el-select v-model="formData.projectId" placeholder="请选择项目" clearable>
+            <el-option v-for="item in projectList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
     </div>
     <template slot="footer">
-      <el-button size="mini" @click="onDialogClose" style="margin-right:10px">取 消</el-button>
+      <el-button size="mini" @click="onDialogClose" style="margin-right: 10px">取 消</el-button>
       <el-button size="mini" type="primary" @click="onSubmit('formRef')">确 定</el-button>
     </template>
   </BaseDialog>
@@ -31,16 +31,14 @@ export default {
         projectId: '',
       },
       formRules: {
-        projectId: [
-          { required: true, message: '请选择需要同步的软件工厂项目', trigger: 'blur' },
-        ],
-      }
+        projectId: [{ required: true, message: '请选择需要同步的软件工厂项目', trigger: 'blur' }],
+      },
     }
   },
   methods: {
     async show() {
-        this.dialogVisible = true
-        this.getProjectList()
+      this.dialogVisible = true
+      this.getProjectList()
     },
     async getProjectList() {
       try {
@@ -67,27 +65,27 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-            const projectId = this.formData.projectId
-            const jsonData = await this.getGenerateJson(projectId)
-            if(jsonData){
-                await SfProjectExtendService.syncProjectToSf(projectId,jsonData)
-                this.$message.success('同步成功',this.formData.projectId)
-            }
-            this.$emit('refresh',this.formData.projectId)
-            this.onDialogClose()
+          const projectId = this.formData.projectId
+          const jsonData = await this.getGenerateJson(projectId)
+          if (jsonData) {
+            await SfProjectExtendService.syncProjectToSf(projectId, jsonData)
+            this.$message.success('同步成功', this.formData.projectId)
+          }
+          this.$emit('refresh', this.formData.projectId)
+          this.onDialogClose()
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     onReset() {
-      this.$refs.formRef.resetFields();
+      this.$refs.formRef.resetFields()
     },
     onDialogClose() {
       this.dialogVisible = false
       this.onReset()
-    }
+    },
   },
 }
 </script>

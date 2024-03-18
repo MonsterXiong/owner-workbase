@@ -2,7 +2,7 @@
   <div class="common-page page-design">
     <div class="left-wrapper">
       <div class="top">
-        <GenProjectSelect ref="genProjectSelectRef" @onChange="onCurrentProject" @onAdd="onAddProject"></GenProjectSelect>
+        <GenProjectSelect ref="genProjectSelectRef" @onChange="onCurrentProject" download></GenProjectSelect>
       </div>
       <div class="bottom">
         <GenMenuTree ref="genMenuTreeRef" :projectId="projectId" @onChange="onCurrentMenu" @onAdd="onAddPage"></GenMenuTree>
@@ -12,15 +12,13 @@
       <div class="top">
         <template v-if="isPage">
           <el-button size="mini" type="primary" @click="onPageDesign">设计页面</el-button>
-          <el-button size="mini" type="danger" @click="onClearPage">清空页面</el-button>
-          <el-button size="mini" @click="onPriviewPageCode">预览当前页面代码</el-button>
-          <el-button size="mini" @click="onDownloadPageCode">下载当前页面代码</el-button>
+          <!-- <el-button size="mini" type="danger" @click="onClearPage">清空页面</el-button> -->
+          <el-button size="mini" plain type="primary" @click="onPriviewPageCode">预览代码</el-button>
+          <el-button size="mini" plain type="primary" @click="onDownloadPageCode">下载代码</el-button>
         </template>
-        <el-button size="mini" style="margin-left: auto" @click="onDownloadCompleteCode">下载完整项目代码</el-button>
-        <el-button size="mini" @click="onAddComponentTemplate">添加页面模板</el-button>
-        <el-button size="mini" @click="onDownloadServiceCode">下载当前项目的API</el-button>
-        <el-button size="mini" @click="onDownloadEnumCode">下载当前项目的枚举</el-button>
-        <el-button size="mini" @click="onSyncSfProject">同步软件工厂项目数据</el-button>
+        <el-button size="mini" plain type="primary" @click="onDownloadServiceCode">下载API</el-button>
+        <el-button size="mini" plain type="primary" @click="onDownloadEnumCode">下载枚举</el-button>
+        <el-button size="mini" plain type="primary" @click="onAddComponentTemplate" style="margin-left:auto !important;">添加页面模板-工具</el-button>
       </div>
       <div class="bottom">
         <SetPageConfig :projectId="projectId" :currentActivePage="currentActivePage" ref="setPageConfigRef"></SetPageConfig>
@@ -29,26 +27,24 @@
     <PageDetailDialog @onClick="onChangeMenuType" ref="pageDetailDialogRef" />
     <AddComponentTemplateDialog ref="addComponentTemplateDialogRef" />
     <AddOrUpdateMenuDialog :projectId="projectId" @refresh="onRefreshMenuList" ref="AddOrUpdateMenuDialogRef" />
-    <ProjectDialog @submit="onSubmit" ref="projectDialogRef" />
-    <SelectSfProjectDialog @refresh="onRefreshByProjectId" ref="selectSfProjectDialogRef"></SelectSfProjectDialog>
+    <PreviewPageCodeDialog ref="previewPageCodeDialogRef"></PreviewPageCodeDialog>
   </div>
 </template>
 
 <script>
 import PageDetailDialog from './components/PageDetailDialog.vue'
-import { PAGE_TYPE } from '../constant/pageType'
 import AddComponentTemplateDialog from './components/AddComponentTemplateDialog.vue'
 import AddOrUpdateMenuDialog from './components/AddOrUpdateMenuDialog.vue'
-import SelectSfProjectDialog from './components/SelectSfProjectDialog.vue'
-import ProjectDialog from '../project/components/ProjectDialog.vue'
+import PreviewPageCodeDialog from './components/PreviewPageCodeDialog.vue'
 import GenProjectSelect from '@/bizComponents/genProjectSelect/GenProjectSelect'
 import GenMenuTree from '@/bizComponents/genMenuTree/GenMenuTree'
 import SetPageConfig from './components/SetPageConfig.vue'
 import { SfMenuDetailService, GenExtendService } from '@/services'
+import { downloadFile } from '@/utils/fileUtil'
 export default {
   data() {
     return {
-      projectId: '',
+      projectId:'',
       projectList: [],
       menuList: [],
       currentActivePage: {},
@@ -62,64 +58,58 @@ export default {
       return this.currentActivePage?.menuType == 'page'
     },
   },
-  components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, ProjectDialog,SelectSfProjectDialog },
+  mounted () {
+    const projectId = this.$route.query.projectId
+    if( projectId ){
+      this.$refs.genProjectSelectRef.setCurrentKey(projectId)
+    }
+  },
+  components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, PreviewPageCodeDialog },
   methods: {
-    onRefreshByProjectId(projectId){
+    onRefreshByProjectId(projectId) {
       this.$refs.genProjectSelectRef.refresh()
       this.$refs.genProjectSelectRef.setCurrentKey(projectId)
     },
-    onSyncSfProject(){
-      this.$refs.selectSfProjectDialogRef.show()
-    },
-    async onDownloadEnumCode(){
+
+    async onDownloadEnumCode() {
       const file = await GenExtendService.genSfEnumByProjectId(this.projectId)
-      this.downloadFile(file)
+      downloadFile(file)
     },
     async onDownloadServiceCode() {
       const file = await GenExtendService.genSfServiceByProjectId(this.projectId)
-      this.downloadFile(file)
-    },
-    downloadFile(file) {
-      const href = URL.createObjectURL(file)
-      const box = document.createElement('a')
-      box.href = href
-      box.click()
+      downloadFile(file)
     },
     async onPriviewPageCode() {
       if (!this.currentMenuId) {
         return this.$message.warning('请选择页面')
       }
-      await GenExtendService.genSfPageCodeByMenuId(this.currentMenuId)
+      const { data } = await GenExtendService.genSfPageCodeByMenuId(this.currentMenuId)
+      if (data?.length) {
+        this.$refs.previewPageCodeDialogRef.show(data)
+      } else {
+        return this.$message.warning('暂无可以预览的代码')
+      }
     },
     async onDownloadPageCode() {
       if (!this.currentMenuId) {
         return this.$message.warning('请选择页面')
       }
       const file = await GenExtendService.downloadSfPageCodeByMenuId(this.currentMenuId)
-      this.downloadFile(file)
-    },
-    async onDownloadCompleteCode() {
-      const file = await GenExtendService.genSfProjectByProjectId(this.projectId)
-      this.downloadFile(file)
-    },
-    async onSubmit(formData) {
-      try {
-        const {data} = await this.onSaveAPI(formData)
-        this.$refs.genProjectSelectRef.refresh()
-        this.$refs.genProjectSelectRef.setCurrentKey(data.projectId)
-        this.$message.success('操作成功')
-      } catch (error) {
-        this.$message.error('操作失败，请联系管理员或者重试')
-      }
+      downloadFile(file)
     },
     onCurrentMenu(menuData) {
       this.currentActivePage = menuData
     },
     async onCurrentProject(projectId) {
       this.projectId = projectId
-    },
-    onAddProject() {
-      this.$refs.projectDialogRef.show()
+      if (this.$route.query.projectId !== projectId) {
+        this.$router.replace({
+          path: this.$route.fullpath,
+          query: {
+            projectId,
+          },
+        })
+      }
     },
     async onRefreshMenuList(menuData) {
       this.$refs.genMenuTreeRef.refresh()
@@ -206,6 +196,8 @@ export default {
 .right-wrapper {
   flex: 1;
   .top {
+    display: flex;
+    padding:6px;
     .el-button + .el-button {
       margin-left: 10px !important;
     }

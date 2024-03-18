@@ -7,6 +7,9 @@
       :pageInfo.sync="pageInfo"
       :tableData="tableData"
       :total="total"
+      @onOpen="onOpen"
+      @onSyncUpdate="onSyncUpdate"
+      @onDownload="onDownload"
       @onEdit="onEdit"
       @onDelete="onDelete"
       @onDbConfig="onDbConfig"
@@ -16,11 +19,12 @@
     <ProjectDialog ref="projectDialogRef" @submit="onSubmit"></ProjectDialog>
     <ProjectConfigDialog ref="projectConfigDialogRef" @submit="onProjectConfigSubmit"></ProjectConfigDialog>
     <ProjectDbConfigDialog ref="projectDbConfigDialogRef" @submit="onProjectConfigSubmit"></ProjectDbConfigDialog>
+    <SelectSfProjectDialog ref="selectSfProjectDialogRef" @refresh="getTableData"></SelectSfProjectDialog>
   </TableLayout>
 </template>
 
 <script>
-import { SfProjectService,SfProjectConfigService } from '@/services'
+import { SfProjectService,SfProjectConfigService,GenExtendService } from '@/services'
 import { SfProjectExtendService } from '@/services'
 import { QueryConditionBuilder } from '@/utils/queryConditionBuilder'
 import ProjectDialog from './components/ProjectDialog.vue'
@@ -28,6 +32,9 @@ import ProjectTable from './components/ProjectTable.vue'
 import ProjectQuery from './components/ProjectQuery.vue'
 import ProjectConfigDialog from './components/ProjectConfigDialog.vue'
 import ProjectDbConfigDialog from './components/ProjectDbConfigDialog.vue'
+import SelectSfProjectDialog from './components/SelectSfProjectDialog.vue'
+import { downloadFile } from '@/utils/fileUtil'
+import routesConstant from '@/router/routesConstant'
 export default {
   name: 'Project',
   components: {
@@ -35,7 +42,9 @@ export default {
     ProjectQuery,
     ProjectDialog,
     ProjectConfigDialog,
-    ProjectDbConfigDialog
+    ProjectDbConfigDialog,
+    SelectSfProjectDialog
+
   },
   data() {
     return {
@@ -61,6 +70,19 @@ export default {
     },
   },
   methods: {
+    onOpen(row){
+      this.$router.push({
+        path:routesConstant.GEN_PAGE_DESIGN.path,
+        query:{
+          projectId:row.projectId
+        }
+      })
+    },
+    onSyncUpdate(row){},
+    async onDownload(){
+      const file = await GenExtendService.genSfProjectByProjectId(this.projectId)
+      downloadFile(file)
+    },
     async onProjectConfigSubmit(formData){
       await SfProjectConfigService.saveSfProjectConfig(formData)
       this.$message.success('操作成功')
@@ -140,6 +162,10 @@ export default {
         console.error('删除失败', e)
       }
     },
+    // 同步
+    onSyncSfProject(){
+      this.$refs.selectSfProjectDialogRef.show()
+    },
     // 处理query组件触发的方法
     onEvent(type) {
       switch (type) {
@@ -154,6 +180,9 @@ export default {
           break
         case 'batchDelete':
           this.onBatchDelete()
+          break
+        case 'onSync':
+          this.onSyncSfProject()
           break
         default:
           console.log('不支持的方法类型')
