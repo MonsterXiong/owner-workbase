@@ -12,7 +12,7 @@
       <div class="top">
         <template v-if="isPage">
           <el-button size="mini" type="primary" @click="onPageDesign">设计页面</el-button>
-          <!-- <el-button size="mini" type="danger" @click="onClearPage">清空页面</el-button> -->
+          <el-button size="mini" type="danger" @click="onClearPage">清空页面</el-button>
           <el-button size="mini" plain type="primary" @click="onPriviewPageCode">预览代码</el-button>
           <el-button size="mini" plain type="primary" @click="onDownloadPageCode">下载代码</el-button>
         </template>

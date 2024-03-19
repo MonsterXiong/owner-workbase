@@ -74,8 +74,8 @@ export default {
     cursor: pointer;
     &.active,
     &:hover {
-      border: 1px dashed #8492a6;
-      background: #8492a6;
+      border: 1px dashed #356491;
+      background: #356491;
       color: #fff;
     }
   }
