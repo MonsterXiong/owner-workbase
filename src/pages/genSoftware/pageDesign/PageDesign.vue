@@ -16,7 +16,9 @@
           <el-button size="mini" plain type="primary" @click="onPriviewPageCode">预览代码</el-button>
           <el-button size="mini" plain type="primary" @click="onDownloadPageCode">下载代码</el-button>
         </template>
+        <el-button size="mini" plain type="primary" @click="onPriviewServiceCode">预览API</el-button>
         <el-button size="mini" plain type="primary" @click="onDownloadServiceCode">下载API</el-button>
+        <el-button size="mini" plain type="primary" @click="onPriviewEnumCode">预览枚举</el-button>
         <el-button size="mini" plain type="primary" @click="onDownloadEnumCode">下载枚举</el-button>
         <el-button size="mini" plain type="primary" @click="onAddComponentTemplate" style="margin-left:auto !important;">添加页面模板-工具</el-button>
       </div>
@@ -27,7 +29,7 @@
     <PageDetailDialog @onClick="onChangeMenuType" ref="pageDetailDialogRef" />
     <AddComponentTemplateDialog ref="addComponentTemplateDialogRef" />
     <AddOrUpdateMenuDialog :projectId="projectId" @refresh="onRefreshMenuList" ref="AddOrUpdateMenuDialogRef" />
-    <PreviewPageCodeDialog ref="previewPageCodeDialogRef"></PreviewPageCodeDialog>
+    <PreviewCodeDialog ref="previewCodeDialogRef"></PreviewCodeDialog>
   </div>
 </template>
 
@@ -35,7 +37,7 @@
 import PageDetailDialog from './components/PageDetailDialog.vue'
 import AddComponentTemplateDialog from './components/AddComponentTemplateDialog.vue'
 import AddOrUpdateMenuDialog from './components/AddOrUpdateMenuDialog.vue'
-import PreviewPageCodeDialog from './components/PreviewPageCodeDialog.vue'
+import PreviewCodeDialog from './components/PreviewCodeDialog.vue'
 import GenProjectSelect from '@/bizComponents/genProjectSelect/GenProjectSelect'
 import GenMenuTree from '@/bizComponents/genMenuTree/GenMenuTree'
 import SetPageConfig from './components/SetPageConfig.vue'
@@ -64,7 +66,7 @@ export default {
       this.$refs.genProjectSelectRef.setCurrentKey(projectId)
     }
   },
-  components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, PreviewPageCodeDialog },
+  components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, PreviewCodeDialog },
   methods: {
     onRefreshByProjectId(projectId) {
       this.$refs.genProjectSelectRef.refresh()
@@ -79,16 +81,33 @@ export default {
       const file = await GenExtendService.genSfServiceByProjectId(this.projectId)
       downloadFile(file)
     },
+    previewCode(data){
+      if (data?.length) {
+        this.$refs.previewCodeDialogRef.show(data)
+      } else {
+        return this.$message.warning('暂无可以预览的代码')
+      }
+    },
     async onPriviewPageCode() {
       if (!this.currentMenuId) {
         return this.$message.warning('请选择页面')
       }
       const { data } = await GenExtendService.genSfPageCodeByMenuId(this.currentMenuId)
-      if (data?.length) {
-        this.$refs.previewPageCodeDialogRef.show(data)
-      } else {
-        return this.$message.warning('暂无可以预览的代码')
+      this.previewCode(data)
+    },
+    async onPriviewEnumCode() {
+      if (!this.projectId) {
+        return this.$message.warning('请选择项目')
       }
+      const { data } = await GenExtendService.getSfEnumByProjectId(this.projectId)
+      this.previewCode(data.map(item=>{return {...item,filePath:item.name}}))
+    },
+    async onPriviewServiceCode() {
+      if (!this.projectId) {
+        return this.$message.warning('请选择项目')
+      }
+      const { data } = await GenExtendService.getSfServiceByProjectId(this.projectId)
+      this.previewCode(data.map(item=>{return {...item,filePath:item.name}}))
     },
     async onDownloadPageCode() {
       if (!this.currentMenuId) {

@@ -1,18 +1,20 @@
 <template>
   <BaseDialog :title="dialogTitle" :visible="dialogVisible" :before-close="onDialogClose" :width="dialogWidth">
     <div class="common-page">
-      <div class="tab-wrapper">
-        <div
-          v-for="item in pageCodeList"
-          :key="item.filePath"
-          @click="currentPath = item.filePath"
-          :class="{ active: currentPath == item.filePath }"
-          class="tab-item"
-        >
-          {{ item.filePath }}
+      <div style="display: flex;gap:10px;height: 600px">
+        <div class="tab-wrapper">
+          <div
+            v-for="item in pageCodeList"
+            :key="item.filePath"
+            @click="currentPath = item.filePath"
+            :class="{ active: currentPath == item.filePath }"
+            class="tab-item"
+          >
+            {{ item.filePath }}
+          </div>
         </div>
+        <CodeMirror style="height: 100%;width:calc(100% - 250px)" :value="codeContent" :disabled="false" ref="codeMirror" language="x-vue" />
       </div>
-      <CodeMirror style="height: 500px" :value="codeContent" :disabled="false" ref="codeMirror" language="x-vue" />
     </div>
     <template slot="footer">
       <el-button size="mini" style="margin-right: 10px" @click="onCopy">复制</el-button>
@@ -67,9 +69,15 @@ export default {
 
 <style lang="less" scoped>
 .tab-wrapper {
-  display: flex;
+  // display: flex;
+  height:100%;
+  overflow-y: auto;
   .tab-item {
     padding: 5px;
+    width: 235px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     border: 1px solid #eee;
     cursor: pointer;
     &.active,
