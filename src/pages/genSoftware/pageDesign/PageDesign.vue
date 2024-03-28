@@ -15,6 +15,8 @@
           <el-button size="mini" type="danger" @click="onClearPage">清空页面</el-button>
           <el-button size="mini" plain type="primary" @click="onPriviewPageCode">预览代码</el-button>
           <el-button size="mini" plain type="primary" @click="onDownloadPageCode">下载代码</el-button>
+          <el-button size="mini" plain type="primary" @click="onPriviewMenuCode">预览路由</el-button>
+          <el-button size="mini" plain type="primary" @click="onDownloadMenuCode">下载路由</el-button>
         </template>
         <el-button size="mini" plain type="primary" @click="onPriviewServiceCode">预览API</el-button>
         <el-button size="mini" plain type="primary" @click="onDownloadServiceCode">下载API</el-button>
@@ -77,6 +79,10 @@ export default {
       const file = await GenExtendService.genSfEnumByProjectId(this.projectId)
       downloadFile(file)
     },
+    async onDownloadMenuCode() {
+      const file = await GenExtendService.genMenuCodeByMenuId(this.currentMenuId)
+      downloadFile(file)
+    },
     async onDownloadServiceCode() {
       const file = await GenExtendService.genSfServiceByProjectId(this.projectId)
       downloadFile(file)
@@ -93,6 +99,13 @@ export default {
         return this.$message.warning('请选择页面')
       }
       const { data } = await GenExtendService.genSfPageCodeByMenuId(this.currentMenuId)
+      this.previewCode(data)
+    },
+    async onPriviewMenuCode(){
+      if (!this.currentMenuId) {
+        return this.$message.warning('请选择页面')
+      }
+      const { data } = await GenExtendService.getMenuCodeByMenuId(this.currentMenuId)
       this.previewCode(data)
     },
     async onPriviewEnumCode() {

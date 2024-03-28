@@ -18,6 +18,16 @@ const relCode = {
   prop:'',
   label:'关联字段'
 }
+const relVerticalCode = {
+  key:'relVerticalCode',
+  prop:'',
+  label:'关联纵向字段'
+}
+const relHorizontalCode = {
+  key:'relHorizontalCode',
+  prop:'',
+  label:'关联横向字段'
+}
 
 export const FIELD_COMPONENT_TYPE = {
   TREE:'tree',
@@ -28,7 +38,7 @@ export const FIELD_COMPONENT_TYPE = {
 export const FIELD_COMPONENT_INFO = {
   [FIELD_COMPONENT_TYPE.TREE]:[uniqueCode,displayName,parentCode],
   [FIELD_COMPONENT_TYPE.LIST]:[uniqueCode,displayName],
-  [FIELD_COMPONENT_TYPE.MATRIX]:[uniqueCode,relCode]
+  [FIELD_COMPONENT_TYPE.MATRIX]:[uniqueCode,relCode,relVerticalCode,relHorizontalCode]
 }
 
 export function getSpecialFieldInfo(list){

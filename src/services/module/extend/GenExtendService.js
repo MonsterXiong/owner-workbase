@@ -27,4 +27,10 @@ export default class GenExtendService {
   static async getSfServiceByProjectId(projectId) {
     return service.postQuery(`gen/getSfServiceByProjectId`, { projectId })
   }
+  static async getMenuCodeByMenuId(menuId) {
+    return service.postQuery(`gen/getMenuCodeByMenuId`, { menuId })
+  }
+  static async genMenuCodeByMenuId(menuId) {
+    return service.postQueryToBlob(`gen/genMenuCodeByMenuId`, { menuId })
+  }
 }
