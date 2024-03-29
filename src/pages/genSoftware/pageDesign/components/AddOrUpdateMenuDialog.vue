@@ -3,21 +3,28 @@
     <div class="common-page page-detail">
       <el-form ref="formRef" :model="formData" :rules="formRules" label-width="80px">
         <el-form-item label="类型" prop="menuType">
-          <el-radio-group v-model="formData.menuType">
-            <el-radio label="page">页面</el-radio>
+          <el-radio-group v-model="formData.menuType" @input="onChangeParentId">
             <el-radio label="module">模块</el-radio>
+            <el-radio label="page">页面</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="所属上级" prop="parentId">
-          <el-select v-model="formData.parentId" filterable clearable placeholder="请选择所属上级">
-            <el-option v-for="item in menuList" :key="item.menuId" :label="item.menuName" :value="item.menuId"></el-option>
+          <el-select v-model="formData.parentId" filterable clearable placeholder="请选择所属上级" @change="onChangeParentId">
+            <el-option v-for="item in moduleList" :key="item.menuId" :label="item.menuName" :value="item.menuId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="menuName">
           <el-input v-model="formData.menuName"></el-input>
         </el-form-item>
         <el-form-item label="标识" prop="menuCode">
-          <el-input v-model="formData.menuCode"></el-input>
+          <el-row >
+            <el-col :span="20">
+              <el-input v-model="formData.menuCode"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <el-button @click="onTranslate" :loading="loading" :disabled="!formData.menuName">自动识别</el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item label="序号" prop="sort">
           <el-input v-model="formData.sort"></el-input>
@@ -32,9 +39,9 @@
 </template>
 
 <script>
-import { SfMenuService } from '@/services'
+import { SfMenuService,TranslatorExtendService } from '@/services'
 import QueryConditionBuilder from '@/utils/queryConditionBuilder'
-
+import * as changeCase from 'change-case'
 export default {
   props: {
     projectId: {},
@@ -45,8 +52,9 @@ export default {
       dialogVisible: false,
       dialogWidth: '700px',
       menuList:[],
+      moduleList:[],
       formData: {
-        menuType: 'page',
+        menuType: 'module',
         parentId: '',
         menuName: '',
         menuCode: '',
@@ -57,12 +65,13 @@ export default {
         menuType: [{ required: true, message: '请选择类别', trigger: 'change' }],
         menuCode: [{ required: true, message: '请输入标识', trigger: 'blur' }],
       },
+      loading:false
     }
   },
   methods: {
-    show() {
+    async show() {
       this.dialogVisible = true
-      this.getMenuList()
+      await this.getMenuList()
     },
     async getMenuList(){
       this.menuList = []
@@ -71,6 +80,25 @@ export default {
       queryCondition.buildAscSort('sort')
       const { data } = await SfMenuService.querySfMenu(queryCondition)
       this.menuList = data
+      this.moduleList = this.menuList.filter(item=>item.menuType == 'module')
+    },
+    onChangeParentId(value){
+      // 只有新增才会存在这种情况 修改则不会出发
+      const { menuType,parentId } = this.formData
+      const hasCurrentValue = this.menuList.find(item=>item.id == value)
+      const currentParent = hasCurrentValue?value:parentId
+      this.formData.sort = this.menuList.filter(item=>item.parentId == currentParent && item.menuType == menuType)?.length + 1 || 1
+    },
+    async onTranslate(){
+      this.loading = true
+      try {
+        const {data} = await TranslatorExtendService.getResult(this.formData.menuName)
+        this.formData.menuCode = changeCase.camelCase(data)
+      } catch (error) {
+        console.log(error);
+      }finally{
+        this.loading = false
+      }
     },
     onSubmit(formName) {
       this.$refs[formName].validate(async (valid) => {
