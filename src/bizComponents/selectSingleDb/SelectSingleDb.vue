@@ -35,7 +35,10 @@ export default {
     formData:{},
     projectId: {},
     dataList: {},
-    fieldList:{},
+    fieldList:{
+      type:Array,
+      default:()=>[]
+    },
     inLine:{
       type:Boolean,
       default:false
@@ -107,7 +110,9 @@ export default {
       tableList: [],
       currentTableName: '',
       fieldOption:[],
-      currentFormData:{},
+      currentFormData:{
+        fieldList:{}
+      },
       rules:{},
     }
   },
@@ -116,7 +121,7 @@ export default {
     this.setRule()
   },
   methods: {
-    setCurrentData(){
+    async setCurrentData(){
       let dataInfo = null
       if(this.formData){
         dataInfo =_.cloneDeep(this.formData)
@@ -138,6 +143,7 @@ export default {
       const rules = {
         'tableName':[{ required: true, message: `请选择${this.title}`, trigger: 'blur' }]
       }
+
       this.currentFormData?.fieldList.forEach(field=>{
         if(!this.emptyRuleField.includes(field.key)){
           rules[field.key] = [{ required: true, message: `请选择${field.label}`, trigger: 'blur' }]
@@ -164,12 +170,25 @@ export default {
       const { data } = await SfProjectExtendService.getFieldByProjectId(this.projectId, tableName)
       return data
     },
+    async setCurrentValue(value){
+      this.fieldOption = await this.getFieldList(value)
+    },
     async onChangeTable(value){
       this.fieldOption = await this.getFieldList(value)
       this.resetFieldValue(value)
       if(this.trigger){
         this.$emit('onChangeTable',value)
       }
+    },
+    getNameByTableCode(tableCode) {
+      let sourceList = []
+      if(this.isRemote){
+        sourceList = this.tableList
+      }else{
+        sourceList = this.dataList
+      }
+
+      return sourceList.find(item=>item.name == tableCode)?.comment
     },
     getData(){
       // this.$refs.formRef.validate((valid) => {
@@ -181,7 +200,8 @@ export default {
           })
           const formData = {
             tableCode:tableName,
-            fieldList:fieldInfo
+            fieldList:fieldInfo,
+            tableName:this.getNameByTableCode(tableName)
           }
           return formData
       //   }else{

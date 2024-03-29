@@ -2,8 +2,7 @@
   <div class="common-page">
     <SplitLayout :panelSize="3" :projectId="projectId" leftTitle="列表" title="表格">
       <template #left>
-        <SelectSingleDb :formData.sync="leftFormData"
-          ref="selectSingDbLeftRef" :dataList="tableList" type="list" :projectId="projectId"></SelectSingleDb>
+        <SelectSingleDb :formData.sync="leftFormData" ref="selectSingDbLeftRef" :dataList="tableList" type="list" :projectId="projectId"></SelectSingleDb>
       </template>
       <div class="right-wrapper">
         <SelectSingleDb
@@ -15,22 +14,23 @@
           :dataList="tableList"
           type="default"
           :projectId="projectId"
-          @onChangeTable="onChangeTable">
+          @onChangeTable="onChangeTable"
+        >
         </SelectSingleDb>
-        <SetDbFieldTable :projectId="projectId" :tableName="tableName"   ref="setDbFieldRef"></SetDbFieldTable>
+        <SetDbFieldTable :projectId="projectId" :tableName="tableName" ref="setDbFieldRef"></SetDbFieldTable>
       </div>
     </SplitLayout>
   </div>
 </template>
 <script>
-import { SfProjectExtendService } from "@/services";
-import SplitLayout from '@/components/splitLayout/SplitLayout.vue';
-import SelectSingleDb from '@/bizComponents/selectSingleDb/SelectSingleDb.vue';
-import SetDbFieldTable from "@/bizComponents/setDbFieldTable/SetDbFieldTable.vue";
+import { SfProjectExtendService } from '@/services'
+import SplitLayout from '@/components/splitLayout/SplitLayout.vue'
+import SelectSingleDb from '@/bizComponents/selectSingleDb/SelectSingleDb.vue'
+import SetDbFieldTable from '@/bizComponents/setDbFieldTable/SetDbFieldTable.vue'
 export default {
   props: {
     projectId: {},
-    menuDetailInfo: {}
+    menuDetailInfo: {},
   },
   components: {
     SplitLayout,
@@ -43,18 +43,53 @@ export default {
       tableName: null,
       leftFormData: {
         tableName: '',
-        fieldList: {}
+        fieldList: {},
       },
       rightFormData: {
         tableName: '',
-        fieldList: {}
+        fieldList: {},
       },
-      fieldData:[{
-        key:'assiationId',
-        prop:'',
-        label:'联动Id'
-      }]
+      fieldData: [
+        {
+          key: 'assiationId',
+          prop: '',
+          label: '联动Id',
+        },
+      ],
+      sourceList: [],
+      isRemote: false,
     }
+  },
+  watch: {
+    menuDetailInfo: {
+      handler(newValue, oldValue) {
+        const menuParam = JSON.parse(newValue.menuParam)
+        const { templateParam } = menuParam
+        if (templateParam) {
+          console.log('templateParam', templateParam)
+
+          const { list, table } = templateParam
+          if (list) {
+            this.leftFormData = list
+          }
+          if (table) {
+            this.rightFormData = table
+            if (table?.tableCode) {
+              this.isRemote = false
+              const { tableCode, attrs } = table
+              this.$nextTick(() => {
+                this.$refs.selectSingDbRightRef.setCurrentValue(tableCode)
+                this.onChangeTable(tableCode)
+                this.sourceList = attrs
+              })
+            } else {
+              this.isRemote = true
+            }
+          }
+        }
+      },
+      immediate: true,
+    },
   },
   mounted() {
     this.getTableList()
@@ -64,30 +99,33 @@ export default {
       const { data } = await SfProjectExtendService.getTableByProjectId(this.projectId)
       this.tableList = data
     },
-    onChangeTable(tableName){
+    onChangeTable(tableName) {
       this.tableName = tableName
     },
-    getInfo(){
-      const list = this.$refs.selectSingDbRightRef.getData()
-      const table = this.$refs.selectSingDbLeftRef.getData()
+    getInfo() {
+      const list = this.$refs.selectSingDbLeftRef.getData()
+      const table = this.$refs.selectSingDbRightRef.getData()
       const fieldInfo = this.$refs.setDbFieldRef.getTableData()
-      if(!list || !table){
+      if (!list || !table) {
         return null
       }
       const templateParam = {
         list,
-        table
+        table: {
+          ...table,
+          attrs: fieldInfo,
+        },
       }
-      return null
+      return templateParam
     },
   },
 }
 </script>
 <style lang="less" scoped>
-.right-wrapper{
-  height:100%;
+.right-wrapper {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px
+  gap: 10px;
 }
 </style>
