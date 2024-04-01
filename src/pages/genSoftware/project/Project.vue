@@ -19,13 +19,12 @@
     <ProjectDialog ref="projectDialogRef" @submit="onSubmit"></ProjectDialog>
     <ProjectConfigDialog ref="projectConfigDialogRef" @submit="onProjectConfigSubmit"></ProjectConfigDialog>
     <ProjectDbConfigDialog ref="projectDbConfigDialogRef" @submit="onProjectConfigSubmit"></ProjectDbConfigDialog>
-    <SelectSfProjectDialog ref="selectSfProjectDialogRef" @refresh="getTableData"></SelectSfProjectDialog>
+    <SelectSfProjectDialog ref="selectSfProjectDialogRef" @sync="syncProject"></SelectSfProjectDialog>
   </TableLayout>
 </template>
 
 <script>
-import { SfProjectService,SfProjectConfigService,GenExtendService } from '@/services'
-import { SfProjectExtendService } from '@/services'
+import { SfProjectService,SfProjectConfigService,GenExtendService,SfProjectExtendService } from '@/services'
 import { QueryConditionBuilder } from '@/utils/queryConditionBuilder'
 import ProjectDialog from './components/ProjectDialog.vue'
 import ProjectTable from './components/ProjectTable.vue'
@@ -35,6 +34,7 @@ import ProjectDbConfigDialog from './components/ProjectDbConfigDialog.vue'
 import SelectSfProjectDialog from './components/SelectSfProjectDialog.vue'
 import { downloadFile } from '@/utils/fileUtil'
 import routesConstant from '@/router/routesConstant'
+import { ProjectMutations } from '@/store/modules/project'
 export default {
   name: 'Project',
   components: {
@@ -78,7 +78,13 @@ export default {
         }
       })
     },
-    onSyncUpdate(row){},
+    onSyncUpdate(projectId){
+      this.syncProject(projectId)
+    },
+    async syncProject(projectId){
+      await this.$store.dispatch(`project/${ProjectMutations.SYNC_PROJECT}`,projectId)
+      this.getTableData()
+    },
     async onDownload(){
       const file = await GenExtendService.genSfProjectByProjectId(this.projectId)
       downloadFile(file)
@@ -229,5 +235,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

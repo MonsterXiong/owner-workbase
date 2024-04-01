@@ -10,13 +10,18 @@
       <el-table-column prop="projectDescription" align="center" label="项目描述"></el-table-column>
       <el-table-column prop="systemName" align="center" label="系统名称"></el-table-column>
       <el-table-column prop="systemCode" align="center" label="系统标识"></el-table-column>
-      <el-table-column prop="sort" align="center" label="排序"></el-table-column>
+      <!-- <el-table-column prop="sort" align="center" label="排序"></el-table-column> -->
+      <el-table-column prop="syncProjectId" align="center" label="同步项目" width="80px">
+        <template slot-scope="{ row }">
+          <template v-if="row.syncProjectId">
+            <el-button plain type="primary" size="mini" @click="onSyncUpdate(row.syncProjectId)">同步</el-button>
+          </template>
+          <template v-else></template>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="320">
         <template slot-scope="{ row }">
           <el-button plain type="primary" icon="el-icon-view" circle title="打开项目" @click="onOpen(row)"></el-button>
-          <template v-if="row.isSync">
-            <el-button plain type="primary" icon="el-icon-position" circle title="同步更新" @click="onSyncUpdate(row)"></el-button>
-          </template>
           <el-button plain type="primary" icon="el-icon-download" circle title="下载项目" @click="onDownload(row)"></el-button>
           <el-button plain type="primary" icon="el-icon-coin" circle title="数据库配置" @click="onDbConfig(row)"></el-button>
           <el-button plain type="primary" icon="el-icon-setting" circle title="项目配置"  @click="onProjectConfig(row)"></el-button>

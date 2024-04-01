@@ -17,8 +17,7 @@
 </template>
 
 <script>
-import { getGenerateJson, getProjectList } from '@/services/otherSystem.js'
-import { SfProjectExtendService } from '@/services'
+import { getProjectList } from '@/services/otherSystem.js'
 
 export default {
   data() {
@@ -55,23 +54,10 @@ export default {
         this.projectList = []
       }
     },
-    async getGenerateJson(projectId) {
-      if (!projectId) {
-        this.$message.warning('请先选择项目')
-      }
-      const { data } = await getGenerateJson(projectId)
-      return data
-    },
     onSubmit(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const projectId = this.formData.projectId
-          const jsonData = await this.getGenerateJson(projectId)
-          if (jsonData) {
-            await SfProjectExtendService.syncProjectToSf(projectId, jsonData)
-            this.$message.success('同步成功', this.formData.projectId)
-          }
-          this.$emit('refresh', this.formData.projectId)
+          this.$emit('sync', this.formData.projectId)
           this.onDialogClose()
         } else {
           console.log('error submit!!')

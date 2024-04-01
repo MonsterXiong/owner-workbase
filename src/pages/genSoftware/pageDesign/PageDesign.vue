@@ -22,7 +22,8 @@
         <el-button size="mini" plain type="primary" @click="onDownloadServiceCode">下载API</el-button>
         <el-button size="mini" plain type="primary" @click="onPriviewEnumCode">预览枚举</el-button>
         <el-button size="mini" plain type="primary" @click="onDownloadEnumCode">下载枚举</el-button>
-        <el-button size="mini" plain type="primary" @click="onAddComponentTemplate" style="margin-left:auto !important;">添加页面模板-工具</el-button>
+        <el-button size="mini" plain type="primary" @click="onAddComponentTemplate" style="margin-left: auto !important">添加页面模板-工具</el-button>
+        <el-button size="mini" plain type="primary" @click="onSyncProject" style="margin-left: 10px">同步</el-button>
       </div>
       <div class="bottom">
         <SetPageConfig :projectId="projectId" :currentActivePage="currentActivePage" ref="setPageConfigRef"></SetPageConfig>
@@ -43,13 +44,14 @@ import PreviewCodeDialog from './components/PreviewCodeDialog.vue'
 import GenProjectSelect from '@/bizComponents/genProjectSelect/GenProjectSelect'
 import GenMenuTree from '@/bizComponents/genMenuTree/GenMenuTree'
 import SetPageConfig from './components/SetPageConfig.vue'
-import { SfMenuDetailService, GenExtendService } from '@/services'
+import { SfMenuDetailService, GenExtendService,SfProjectService } from '@/services'
 import { downloadFile } from '@/utils/fileUtil'
+import { ProjectMutations } from '@/store/modules/project'
+
 export default {
   data() {
     return {
-      projectId:'',
-      projectList: [],
+      projectId: '',
       menuList: [],
       currentActivePage: {},
     }
@@ -62,14 +64,24 @@ export default {
       return this.currentActivePage?.menuType == 'page'
     },
   },
-  mounted () {
+  mounted() {
     const projectId = this.$route.query.projectId
-    if( projectId ){
+    if (projectId) {
       this.$refs.genProjectSelectRef.setCurrentKey(projectId)
     }
   },
   components: { GenProjectSelect, GenMenuTree, SetPageConfig, PageDetailDialog, AddComponentTemplateDialog, AddOrUpdateMenuDialog, PreviewCodeDialog },
   methods: {
+    async onSyncProject() {
+      const { data:projectData } = await SfProjectService.getSfProject(this.projectId)
+      const syncProjectId = projectData?.syncProjectId
+      if(syncProjectId){
+        await this.$store.dispatch(`project/${ProjectMutations.SYNC_PROJECT}`, this.projectId)
+        this.onRefreshByProjectId(this.projectId)
+      }else{
+        this.$tools.message('不是同步项目',{type:'warning'})
+      }
+    },
     onRefreshByProjectId(projectId) {
       this.$refs.genProjectSelectRef.refresh()
       this.$refs.genProjectSelectRef.setCurrentKey(projectId)
@@ -87,7 +99,7 @@ export default {
       const file = await GenExtendService.genSfServiceByProjectId(this.projectId)
       downloadFile(file)
     },
-    previewCode(data){
+    previewCode(data) {
       if (data?.length) {
         this.$refs.previewCodeDialogRef.show(data)
       } else {
@@ -101,7 +113,7 @@ export default {
       const { data } = await GenExtendService.genSfPageCodeByMenuId(this.currentMenuId)
       this.previewCode(data)
     },
-    async onPriviewMenuCode(){
+    async onPriviewMenuCode() {
       if (!this.currentMenuId) {
         return this.$message.warning('请选择页面')
       }
@@ -113,14 +125,22 @@ export default {
         return this.$message.warning('请选择项目')
       }
       const { data } = await GenExtendService.getSfEnumByProjectId(this.projectId)
-      this.previewCode(data.map(item=>{return {...item,filePath:item.name}}))
+      this.previewCode(
+        data.map((item) => {
+          return { ...item, filePath: item.name }
+        })
+      )
     },
     async onPriviewServiceCode() {
       if (!this.projectId) {
         return this.$message.warning('请选择项目')
       }
       const { data } = await GenExtendService.getSfServiceByProjectId(this.projectId)
-      this.previewCode(data.map(item=>{return {...item,filePath:item.name}}))
+      this.previewCode(
+        data.map((item) => {
+          return { ...item, filePath: item.name }
+        })
+      )
     },
     async onDownloadPageCode() {
       if (!this.currentMenuId) {
@@ -133,15 +153,15 @@ export default {
       this.currentActivePage = menuData
     },
     async onCurrentProject(projectId) {
-      this.projectId = projectId
-      if (this.$route.query.projectId !== projectId) {
-        this.$router.replace({
-          path: this.$route.fullpath,
-          query: {
-            projectId,
-          },
-        })
-      }
+        this.projectId = projectId
+        if (this.$route.query.projectId !== projectId) {
+          this.$router.replace({
+            path: this.$route.fullpath,
+            query: {
+              projectId,
+            },
+          })
+        }
     },
     async onRefreshMenuList(menuData) {
       this.$refs.genMenuTreeRef.refresh()
@@ -229,7 +249,7 @@ export default {
   flex: 1;
   .top {
     display: flex;
-    padding:6px;
+    padding: 6px;
     .el-button + .el-button {
       margin-left: 10px !important;
     }
