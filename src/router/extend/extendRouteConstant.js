@@ -45,5 +45,9 @@ const extendRouteConstant = {
     path: '/gen/genPageDesign',
     name: 'GenPageDesign',
   },
+  GEN_AUTO_DEPLOY: {
+    path: '/gen/genAutoDeploy',
+    name: 'GenAutoDeploy',
+  }
 }
 export default extendRouteConstant

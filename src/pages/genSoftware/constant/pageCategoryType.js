@@ -8,6 +8,8 @@ export const CATEGORY_TYPE = {
   GLOBAL_DIALOG: 'globalGlobal',
   BIZ: 'biz',
   LAYOUT: 'layout',
+	STATISTICS: 'statistics',
   OTHER: 'other',
+	BIZ_COMPONENT: 'bizComponent',
 	/* Software Gen Code Placeholder */
 }

@@ -25,6 +25,24 @@ import WeightMatrix from './weightMatrix/WeightMatrix.vue'
 import CrudTable from './crudTable/CrudTable.vue'
 import BattleActivityDesign from './battleActivityDesign/BattleActivityDesign.vue'
 import LeftListCenterGeneralGraphRightForm from './leftListCenterGeneralGraphRightForm/LeftListCenterGeneralGraphRightForm.vue'
+import StatisticsPie from './statisticsPie/StatisticsPie.vue'
+import StatisticsLine from './statisticsLine/StatisticsLine.vue'
+import StatisticsBar from './statisticsBar/StatisticsBar.vue'
+import StatisticsScatter from './statisticsScatter/StatisticsScatter.vue'
+import StatisticsRadar from './statisticsRadar/StatisticsRadar.vue'
+import StatisticsRelation from './statisticsRelation/StatisticsRelation.vue'
+import StatisticsMatrixtree from './statisticsMatrixtree/StatisticsMatrixtree.vue'
+import StatisticsRisingsun from './statisticsRisingsun/StatisticsRisingsun.vue'
+import StatisticsSankey from './statisticsSankey/StatisticsSankey.vue'
+import StatisticsInstrumentpanel from './statisticsInstrumentpanel/StatisticsInstrumentpanel.vue'
+import Statistics_3dbar from './statistics_3dbar/Statistics_3dbar.vue'
+import BizTable from './bizTable/BizTable.vue'
+import BizOrg from './bizOrg/BizOrg.vue'
+import BizLeftListAndRightTable from './bizLeftListAndRightTable/BizLeftListAndRightTable.vue'
+import BizLeftListAndRightOrg from './bizLeftListAndRightOrg/BizLeftListAndRightOrg.vue'
+import BizLeftTreeAndRightTable from './bizLeftTreeAndRightTable/BizLeftTreeAndRightTable.vue'
+import BizLeftTreeAndRightOrg from './bizLeftTreeAndRightOrg/BizLeftTreeAndRightOrg.vue'
+import BizForm from './bizForm/BizForm.vue'
 /* Software Gen Code Require Placeholder */
 
 // 可以使用自动导入隐射出一个动态组件MAP
@@ -56,5 +74,23 @@ export const COMPONENT_MAP = {
 	[PAGE_TYPE.CRUD_TABLE]: CrudTable,
 	[PAGE_TYPE.BATTLE_ACTIVITY_DESIGN]: BattleActivityDesign,
 	[PAGE_TYPE.LEFT_LIST_CENTER_GENERAL_GRAPH_RIGHT_FORM]: LeftListCenterGeneralGraphRightForm,
+	[PAGE_TYPE.STATISTICS_PIE]: StatisticsPie,
+	[PAGE_TYPE.STATISTICS_LINE]: StatisticsLine,
+	[PAGE_TYPE.STATISTICS_BAR]: StatisticsBar,
+	[PAGE_TYPE.STATISTICS_SCATTER]: StatisticsScatter,
+	[PAGE_TYPE.STATISTICS_RADAR]: StatisticsRadar,
+	[PAGE_TYPE.STATISTICS_RELATION]: StatisticsRelation,
+	[PAGE_TYPE.STATISTICS_MATRIXTREE]: StatisticsMatrixtree,
+	[PAGE_TYPE.STATISTICS_RISINGSUN]: StatisticsRisingsun,
+	[PAGE_TYPE.STATISTICS_SANKEY]: StatisticsSankey,
+	[PAGE_TYPE.STATISTICS_INSTRUMENTPANEL]: StatisticsInstrumentpanel,
+	[PAGE_TYPE.STATISTICS_3DBAR]: Statistics_3dbar,
+	[PAGE_TYPE.BIZ_TABLE]: BizTable,
+	[PAGE_TYPE.BIZ_ORG]: BizOrg,
+	[PAGE_TYPE.BIZ_LEFT_LIST_AND_RIGHT_TABLE]: BizLeftListAndRightTable,
+	[PAGE_TYPE.BIZ_LEFT_LIST_AND_RIGHT_ORG]: BizLeftListAndRightOrg,
+	[PAGE_TYPE.BIZ_LEFT_TREE_AND_RIGHT_TABLE]: BizLeftTreeAndRightTable,
+	[PAGE_TYPE.BIZ_LEFT_TREE_AND_RIGHT_ORG]: BizLeftTreeAndRightOrg,
+	[PAGE_TYPE.BIZ_FORM]: BizForm,
 	/* Software Gen Code Placeholder */
 }

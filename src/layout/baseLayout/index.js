@@ -36,6 +36,15 @@ const genMenuData = [
     eventType: EMIT_TYPE.PAGE,
     eventParams: routesConstant.GEN_PAGE_DESIGN.path,
   },
+  {
+    menuCode: 'autoDeploy',
+    name: '自动部署',
+    parent: MENU_CODE.GEN_SOFTWARE,
+    icon: 'icon-shouye',
+    type: VIEW_TYPE.VIEW_PAGE,
+    eventType: EMIT_TYPE.PAGE,
+    eventParams: routesConstant.GEN_AUTO_DEPLOY.path,
+  },
 ]
 const toolMenuData = [
   {
@@ -78,14 +87,14 @@ const testMenuData = [
 ]
 
 const menuData = [
-  // {
-  //   menuCode: MENU_CODE.FE_WORKSPACE,
-  //   name: '前端工作台',
-  //   parent: null,
-  //   icon: 'icon-a-ziyuan22',
-  //   type: VIEW_TYPE.VIEW_MODULE,
-  //   disabled: false,
-  // },
+  {
+    menuCode: MENU_CODE.FE_WORKSPACE,
+    name: '前端工作台',
+    parent: null,
+    icon: 'icon-a-ziyuan22',
+    type: VIEW_TYPE.VIEW_MODULE,
+    disabled: false,
+  },
   // {
   //   menuCode: MENU_CODE.GEN_PLATFORM,
   //   name: '代码生成平台',
@@ -112,7 +121,7 @@ const menuData = [
     eventType: EMIT_TYPE.PAGE,
     eventParams: routesConstant.GEN_PROJECT.path,
   },
-  // ...testMenuData,
+  ...testMenuData,
   ...toolMenuData,
   ...genMenuData,
 ]

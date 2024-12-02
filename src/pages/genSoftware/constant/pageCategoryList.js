@@ -38,8 +38,16 @@ export const CATEGORY_LIST = [
     label: '全局弹窗类',
   },
   {
+    value: CATEGORY_TYPE.STATISTICS,
+    label: '统计类',
+  },
+  {
     value: CATEGORY_TYPE.OTHER,
     label: '其它类',
+  },
+	{
+    value: CATEGORY_TYPE.BIZ_COMPONENT,
+    label: '业务组件类',
   },
 	/* Software Gen Code Placeholder */
 ]

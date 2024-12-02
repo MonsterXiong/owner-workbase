@@ -25,6 +25,10 @@ const routes = [
     ...extendRouteConstant.GEN_PAGE_DESIGN,
     component: () => import('@/pages/genSoftware/pageDesign/PageDesign.vue'),
   },
+  {
+    ...extendRouteConstant.GEN_AUTO_DEPLOY,
+    component: () => import('@/pages/genSoftware/autoDeploy/AutoDeploy.vue'),
+  },
 ]
 
 

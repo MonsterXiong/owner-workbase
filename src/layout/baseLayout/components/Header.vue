@@ -36,7 +36,7 @@ export default {
     return {
       configData,
       menuData,
-      currentActiveMenu: MENU_CODE.GEN_SOFTWARE,
+      currentActiveMenu: MENU_CODE.FE_WORKSPACE,
       currentActiveSubMenu: '',
     }
   },

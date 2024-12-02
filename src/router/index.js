@@ -10,9 +10,14 @@ Vue.use(VueRouter)
 const currentRoutes = [
   {
     path:routesConstant.HOME.path,
-    redirect:routesConstant.GEN_PAGE_DESIGN.path,
+    redirect:routesConstant.WELCOME.path,
+    // redirect:'/fe',
     component: BaseLayout,
     children:[...baseRoutes,...routes,]
+  },
+  {
+    path:'/fe',
+    component: () => import('@/pages/nav/index.vue')
   },
 ]
 

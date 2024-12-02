@@ -47,7 +47,7 @@ export default {
       currentActivePageType: '',
       dialogTitle: '设计页面',
       dialogVisible: false,
-      dialogWidth: '960px',
+      dialogWidth: '1080px',
     }
   },
   components: {
